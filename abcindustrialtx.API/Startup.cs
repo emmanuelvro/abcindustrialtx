@@ -2,10 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using abcindustrialtx.Business.Implements;
+using abcindustrialtx.Business.Interfaces;
+using abcindustrialtx.DAO;
+using abcindustrialtx.DAO.Interfaces;
+using abcindustrialtx.DAO.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +31,15 @@ namespace abcindustrialtx.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<AbcIndustrialDbContext>(option =>
+            {
+                option.UseMySQL(Configuration.GetConnectionString("DefaultConnection"),
+                    assambly => assambly.MigrationsAssembly("abcindustrialtx.API"));
+            });
+
+            services.AddTransient<ICatColoresDAO, CatColoresRepository>();
+            services.AddTransient<ICatColores, CatColores>();
             services.AddControllers();
         }
 

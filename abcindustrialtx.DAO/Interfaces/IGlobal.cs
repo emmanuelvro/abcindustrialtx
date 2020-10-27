@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace abcindustrialtx.DAO.Interfaces
 {
     public interface IGlobal<T>
     {
-        T Insert(T objeto);
-        Task<T> InsertAsync(T objeto);
-        T Update(T objeto);
-        Task<T> UpdateAsync(T objeto);
-        bool Delete(int id);
-        Task<bool> DeleteAsync(int id);
-        T GetById(int id);
-        Task<T> GetByIdAsync(int id);
-        List<T> Get();
-        Task<List<T>> GetAsync();
+        T Insert(T entidad);
+        Task<T> InsertAsync(T entidad);
+        T Update(T entidad, object key);
+        Task<T> UpdateAsync(T entidad, object key);
+        void Delete(T entidad);
+        Task<int> DeleteAsync(T entidad);
+        T GetById(object id);
+        Task<T> GetByIdAsync(object id);
+        IQueryable<T> Get();
+        Task<ICollection<T>> GetAsync();
     }
 }
