@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace abcindustrialtx.DAO.Implements
 {
-    public class Global<T> : IGlobal<T> where T : class
+    public class Global<T> : IGlobalDAO<T> where T : class
     {
         private readonly AbcIndustrialDbContext _context;
 

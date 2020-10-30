@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace abcindustrialtx.Business.Implements
 {
-    public class CatColores : Interfaces.ICatColores
+    public class CatColoresBLL : Interfaces.ICatColoresBLL
     {
         private readonly ICatColoresDAO _catColoresDao;
 
-        public CatColores(ICatColoresDAO catColoresDao)
+        public CatColoresBLL(ICatColoresDAO catColoresDao)
         {
             _catColoresDao = catColoresDao;
         }

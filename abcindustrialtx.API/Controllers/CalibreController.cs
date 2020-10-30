@@ -2,29 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using abcindustrialtx.Business.Implements;
 using abcindustrialtx.Business.Interfaces;
-using abcindustrialtx.DAO;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace abcindustrialtx.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ColoresController : ControllerBase
+    public class CalibreController : Controller
     {
-        private ICatColoresBLL _catColores;
-        public ColoresController(ICatColoresBLL catColores)
+        private ICatCalibresBLL _catCalibre;
+        public CalibreController(ICatCalibresBLL catCalibre)
         {
-            _catColores = catColores;
+            _catCalibre = catCalibre;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_catColores.Get());
+            return Ok(_catCalibre.Get());
         }
     }
 }
-

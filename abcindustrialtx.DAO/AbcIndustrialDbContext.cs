@@ -170,8 +170,16 @@ namespace abcindustrialtx.DAO
                 entity.Property(e => e.UsrActivo)
                     .HasColumnName("usr_activo")
                     .HasColumnType("tinyint unsigned");
-            });
 
+                entity.Property(e => e.PasswordSalt)
+                    .HasColumnName("password_salt")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.FechaAlta)
+                .HasColumnName("fecha_alta")
+                .HasColumnType("datetime");
+            });
+                
             modelBuilder.Entity<ColoresProductos>(entity =>
             {
                 entity.HasKey(e => e.IdcoloresProductos)

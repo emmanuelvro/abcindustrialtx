@@ -1,15 +1,15 @@
-﻿using abcindustrialtx.Entities;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Text;
+using abcindustrialtx.Entities;
 
 namespace abcindustrialtx.Business.Interfaces
 {
-    public interface ICatColores
+    public interface ICatCalibresBLL
     {
         //CatColores GetById(int id);
         //Task<CatColores> GetByIdAsync(int id);
-        List<CatColores> Get();
+        List<CatCalibre> Get();
         //Task<List<CatColores>> GetAsync();
     }
 }
-

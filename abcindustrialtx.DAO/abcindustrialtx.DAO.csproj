@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\abcindustrialtx.Entities\abcindustrialtx.Entities.csproj" />
+    <ProjectReference Include="..\abcindustrialtx.Utilities\abcindustrialtx.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

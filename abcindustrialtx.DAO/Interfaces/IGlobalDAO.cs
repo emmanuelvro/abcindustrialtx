@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace abcindustrialtx.DAO.Interfaces
 {
-    public interface IGlobal<T>
+    public interface IGlobalDAO<T>
     {
         T Insert(T entidad);
         Task<T> InsertAsync(T entidad);

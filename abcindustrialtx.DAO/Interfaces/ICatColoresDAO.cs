@@ -2,7 +2,7 @@
 
 namespace abcindustrialtx.DAO.Interfaces
 {
-    public interface ICatColoresDAO : IGlobal<CatColores>
+    public interface ICatColoresDAO : IGlobalDAO<CatColores>
     {
         // aqui van otros métodos
     }
