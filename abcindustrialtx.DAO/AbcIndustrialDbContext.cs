@@ -55,6 +55,15 @@ namespace abcindustrialtx.DAO
                     .HasColumnName("id_calibre")
                     .HasColumnType("int unsigned");
 
+                entity.Property(e => e.CalibreDesc)
+                    .IsRequired()
+                    .HasColumnName("calibre_desc")
+                    .HasColumnType("float unsigned");
+
+                entity.Property(e => e.FechaAlta)
+                    .HasColumnName("fecha_alta")
+                    .HasColumnType("date");
+
                 entity.Property(e => e.Activo)
                     .HasColumnName("activo")
                     .HasColumnType("tinyint unsigned");
@@ -107,6 +116,10 @@ namespace abcindustrialtx.DAO
                     .IsRequired()
                     .HasColumnName("color_material")
                     .HasMaxLength(85);
+
+                entity.Property(e => e.FechaAlta)
+                .HasColumnName("fecha_alta")
+                .HasColumnType("datetime");
 
                 entity.Property(e => e.NombreMaterial)
                     .IsRequired()

@@ -1,15 +1,11 @@
 ﻿using abcindustrialtx.Business.Interfaces;
 using abcindustrialtx.DAO.Interfaces;
 using abcindustrialtx.Entities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abcindustrialtx.Business.Implements
 {
-    public class CatColoresBLL : Interfaces.ICatColoresBLL
+    public class CatColoresBLL : ICatColoresBLL
     {
         private readonly ICatColoresDAO _catColoresDao;
 
@@ -19,9 +15,22 @@ namespace abcindustrialtx.Business.Implements
         }
 
 
-        public List<Entities.CatColores> Get()
+        //public List<CatColores> Get()
+        //{
+        //    return _catColoresDao.Get().ToList();
+        //}
+
+        public CatColores Insert(CatColores entidad)
         {
-            return _catColoresDao.Get().ToList();
+            //entidad.NombreDesc = "";
+            //entidad.FechaAlta = DateTime.Now;
+            //entidad.Activo = 1;
+            return _catColoresDao.Insert(entidad);
+        }
+
+        IQueryable<CatColores> ICatColoresBLL.Get()
+        {
+            return _catColoresDao.Get();
         }
 
         //public async Task<List<CatColores>> GetAsync()

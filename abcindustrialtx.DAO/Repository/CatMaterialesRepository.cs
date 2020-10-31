@@ -1,14 +1,16 @@
 ﻿using abcindustrialtx.DAO.Implements;
 using abcindustrialtx.DAO.Interfaces;
 using abcindustrialtx.Entities;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace abcindustrialtx.DAO.Repository
 {
-    public class CatColoresRepository : Global<CatColores>, ICatColoresDAO
+    public class CatMaterialesRepository : Global<CatHilosMateriales>, ICatMaterialesDAO
     {
         private readonly AbcIndustrialDbContext _context;
-
-        public CatColoresRepository(AbcIndustrialDbContext context): base (context)
+        public CatMaterialesRepository(AbcIndustrialDbContext context): base (context)
         {
             _context = context;
         }

@@ -13,6 +13,10 @@ namespace abcindustrialtx.API.Infrastructure
 
             CreateMap<UsuarioLoginDTO, CatUsuario>();
             CreateMap<CatUsuario, UsuarioLoginDTO>();
+
+            CreateMap<CatColores, CatColoresDTO>();
+            CreateMap<CatCalibre, CatCalibreDTO>();
+            CreateMap<CatHilosMateriales, CatMaterialesDTO>();
         }
     }
 }

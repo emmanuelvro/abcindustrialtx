@@ -59,16 +59,16 @@ namespace abcindustrialtx.API
             });
 
             services.AddTransient<ICatColoresDAO, CatColoresRepository>();
-            services.AddTransient<ICatColoresBLL, CatColoresBLL>();
             services.AddTransient<ICatCalibreDAO, CatCalibreRepository>();
-            services.AddTransient<ICatCalibresBLL, CatCalibresBLL>();
             services.AddTransient<ICatUsuarioDAO, CatUsuarioRepository>();
             services.AddTransient<IRolesDAO, CatRolesRepository>();
+            services.AddTransient<ICatMaterialesDAO, CatMaterialesRepository>();
 
             services.AddTransient<ICatColoresBLL, CatColoresBLL>();
+            services.AddTransient<ICatCalibresBLL, CatCalibresBLL>();
             services.AddTransient<ICatUsuarioBLL, CatUsuarioBLL>();
             services.AddTransient<ICatRolesBLL, CatRolesBLL>();
-
+            services.AddTransient<ICatMaterialesBLL, CatMaterialesBLL>();
             services.AddSingleton(mapper => _mapperConfiguration.CreateMapper());
             services.AddControllers();
         }

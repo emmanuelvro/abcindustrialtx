@@ -1,15 +1,11 @@
 ﻿using abcindustrialtx.Business.Interfaces;
 using abcindustrialtx.DAO.Interfaces;
 using abcindustrialtx.Entities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abcindustrialtx.Business.Implements
 {
-    public class CatCalibresBLL: Interfaces.ICatCalibresBLL
+    public class CatCalibresBLL: ICatCalibresBLL
     {
         private readonly ICatCalibreDAO _catCalibresDao;
 
@@ -19,9 +15,14 @@ namespace abcindustrialtx.Business.Implements
         }
 
 
-        public List<CatCalibre> Get()
+        public IQueryable<CatCalibre> Get()
         {
-            return _catCalibresDao.Get().ToList();
+            return _catCalibresDao.Get();
+        }
+
+        public CatCalibre Insert(CatCalibre entidad)
+        {
+            return _catCalibresDao.Insert(entidad);
         }
 
         //public async Task<List<CatColores>> GetAsync()

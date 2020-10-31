@@ -7,34 +7,32 @@ namespace abcindustrialtx.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ColoresController : ControllerBase
+    public class MaterialesController : ControllerBase
     {
-        private ICatColoresBLL _catColores;
+        private ICatMaterialesBLL _catMateriales;
         private readonly IMapper _mapper = null;
         //private readonly IConfiguration _configuration;
-        public ColoresController(ICatColoresBLL catColores, IMapper mapper)
+        public MaterialesController(ICatMaterialesBLL catMateriales, IMapper mapper)
         {
-            _catColores = catColores;
+            _catMateriales = catMateriales;
             _mapper = mapper;
             //_configuration = configuration;
         }
 
-        [HttpPost("insertcolor")]
-        public IActionResult InsertColor(CatColores colores)
+        [HttpPost("insertmaterial")]
+        public IActionResult InsertMaterial(CatHilosMateriales materiales)
         {
-            var color = _mapper.Map<CatColores>(colores);
-            if (!ModelState.IsValid) 
-            {
-                _catColores.Insert(color);
-            }
+            var material = _mapper.Map<CatHilosMateriales>(materiales);
+
+                _catMateriales.Insert(material);
+
             return Ok();
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_catColores.Get());
+            return Ok(_catMateriales.Get());
         }
     }
 }
-

@@ -11,6 +11,8 @@ namespace abcindustrialtx.Entities
         }
 
         public int IdCalibre { get; set; }
+        public float CalibreDesc { get; set; }
+        public DateTime FechaAlta { get; set; }
         public byte? Activo { get; set; }
 
         public virtual ICollection<TblProducto> TblProducto { get; set; }
