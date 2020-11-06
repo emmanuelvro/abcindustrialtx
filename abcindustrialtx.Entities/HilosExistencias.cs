@@ -5,10 +5,16 @@ namespace abcindustrialtx.Entities
 {
     public partial class HilosExistencias
     {
-        public int IdColor { get; set; }
-        public int CantidadExistente { get; set; }
-        public int CantidadBobinas { get; set; }
+        public HilosExistencias()
+        {
+            HilosProductos = new HashSet<HilosProductos>();
+        }
 
-        public virtual CatColores IdColorNavigation { get; set; }
+        public int IdExistencia { get; set; }
+        public int Cantidad { get; set; }
+        public int CantidadBobinas { get; set; }
+        public int IdColor { get; set; }
+
+        public virtual ICollection<HilosProductos> HilosProductos { get; set; }
     }
 }

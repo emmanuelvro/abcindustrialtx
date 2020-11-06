@@ -3,10 +3,10 @@ using System.Linq;
 
 namespace abcindustrialtx.Business.Interfaces
 {
-    public interface ICatUsuarioBLL
+    public interface IUsuariosBLL
     {
-        CatUsuario Insert(CatUsuario entidad);
-        IQueryable<CatUsuario> GetUsers();
-        CatUsuario Login(CatUsuario entidad);
+        Usuarios Insert(Usuarios entidad);
+        IQueryable<Usuarios> GetUsers();
+        Usuarios Login(Usuarios entidad);
     }
 }

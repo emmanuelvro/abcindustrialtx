@@ -13,11 +13,25 @@ namespace abcindustrialtx.Business.Implements
         {
             _catCalibresDao = catCalibresDao;
         }
+        public void Delete(CatCalibre entidad)
+        {
+            _catCalibresDao.Delete(entidad);
+        }
 
+        public CatCalibre GetCalibreById(int id)
+        {
+            return _catCalibresDao.GetById(id);
+        }
 
-        public IQueryable<CatCalibre> Get()
+        public IQueryable<Entities.CatCalibre> GetCalibres()
         {
             return _catCalibresDao.Get();
+        }
+
+
+        public void Update(CatCalibre entidad, int id)
+        {
+            _catCalibresDao.Update(entidad, id);
         }
 
         public CatCalibre Insert(CatCalibre entidad)
@@ -25,26 +39,5 @@ namespace abcindustrialtx.Business.Implements
             return _catCalibresDao.Insert(entidad);
         }
 
-        //public async Task<List<CatColores>> GetAsync()
-        //{
-        //    try
-        //    {
-        //        return await _iProductosDAO.GetAsync();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
-
-        //public CatColores GetById(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<CatColores> GetByIdAsync(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

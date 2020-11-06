@@ -18,14 +18,14 @@ namespace abcindustrialtx.API.Controllers
     [ApiController]
     public class UsuariosController : ControllerBase
     {
-        private readonly ICatUsuarioBLL _catUsuario = null;
+        private readonly IUsuariosBLL _Usuarios = null;
         private readonly IMapper _mapper = null;
         private readonly IConfiguration _configuration;
 
-        public UsuariosController(ICatUsuarioBLL catUsuario, IMapper mapper,
+        public UsuariosController(IUsuariosBLL Usuarios, IMapper mapper,
             IConfiguration configuration)
         {
-            _catUsuario = catUsuario;
+            _Usuarios = Usuarios;
             _mapper = mapper;
             _configuration = configuration;
         }
@@ -33,15 +33,15 @@ namespace abcindustrialtx.API.Controllers
         [HttpGet]
         public IActionResult GetAllUsers()
         {
-            return Ok(_catUsuario.GetUsers());
+            return Ok(_Usuarios.GetUsers());
         }
 
         [HttpPost("insertuser")]
         public IActionResult InsertUser(UsuarioDto usuario)
         {
-            var user = _mapper.Map<CatUsuario>(usuario);
+            var user = _mapper.Map<Usuarios>(usuario);
 
-            _catUsuario.Insert(user);
+            _Usuarios.Insert(user);
 
             return Ok();
         }
@@ -49,7 +49,7 @@ namespace abcindustrialtx.API.Controllers
         [HttpPost("login")]
         public ActionResult<SuccessfulLoginResult> Login(UsuarioLoginDTO usuario)
         {
-            CatUsuario user = _catUsuario.Login(_mapper.Map<CatUsuario>(usuario));
+            Usuarios user = _Usuarios.Login(_mapper.Map<Usuarios>(usuario));
 
             if (user == null)
                 return BadRequest("Credenciales inválidas");
@@ -61,7 +61,7 @@ namespace abcindustrialtx.API.Controllers
             return new SuccessfulLoginResult() { Token = serializarToken };
         }
 
-        private JwtSecurityToken GenerateTokenAsync(CatUsuario user)
+        private JwtSecurityToken GenerateTokenAsync(Usuarios user)
         {
             var claims = new List<Claim>()
             {

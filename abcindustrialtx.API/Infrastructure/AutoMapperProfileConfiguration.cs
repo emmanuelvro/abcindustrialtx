@@ -8,15 +8,17 @@ namespace abcindustrialtx.API.Infrastructure
     {
         public AutoMapperProfileConfiguration()
         {
-            CreateMap<CatUsuario, UsuarioDto>();
-            CreateMap<UsuarioDto, CatUsuario>();
+            CreateMap<Usuarios, UsuarioDto>();
+            CreateMap<UsuarioDto, Usuarios>();
 
-            CreateMap<UsuarioLoginDTO, CatUsuario>();
-            CreateMap<CatUsuario, UsuarioLoginDTO>();
+            CreateMap<UsuarioLoginDTO, Usuarios>();
+            CreateMap<Usuarios, UsuarioLoginDTO>();
 
             CreateMap<CatColores, CatColoresDTO>();
             CreateMap<CatCalibre, CatCalibreDTO>();
-            CreateMap<CatHilosMateriales, CatMaterialesDTO>();
+            CreateMap<CatMaterial, CatMaterialesDTO>();
+
+            CreateMap<CatPresentacion, CatPresentacionDTO>();
         }
     }
 }

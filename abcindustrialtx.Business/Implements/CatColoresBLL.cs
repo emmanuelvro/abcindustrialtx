@@ -13,46 +13,31 @@ namespace abcindustrialtx.Business.Implements
         {
             _catColoresDao = catColoresDao;
         }
-
-
-        //public List<CatColores> Get()
-        //{
-        //    return _catColoresDao.Get().ToList();
-        //}
-
-        public CatColores Insert(CatColores entidad)
+        public void Delete(CatColores entidad)
         {
-            //entidad.NombreDesc = "";
-            //entidad.FechaAlta = DateTime.Now;
-            //entidad.Activo = 1;
-            return _catColoresDao.Insert(entidad);
+            _catColoresDao.Delete(entidad);
         }
 
-        IQueryable<CatColores> ICatColoresBLL.Get()
+        public CatColores GetColorById(int id)
+        {
+            return _catColoresDao.GetById(id);
+        }
+
+        public IQueryable<Entities.CatColores> GetColors()
         {
             return _catColoresDao.Get();
         }
 
-        //public async Task<List<CatColores>> GetAsync()
-        //{
-        //    try
-        //    {
-        //        return await _iProductosDAO.GetAsync();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
 
-        //public CatColores GetById(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public void Update(CatColores entidad, int id)
+        {
+            _catColoresDao.Update(entidad, id);
+        }
 
-        //public Task<CatColores> GetByIdAsync(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public CatColores Insert(CatColores entidad)
+        {
+            return _catColoresDao.Insert(entidad);
+        }
+
     }
 }

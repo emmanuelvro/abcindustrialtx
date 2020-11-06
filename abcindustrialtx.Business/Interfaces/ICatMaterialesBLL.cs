@@ -5,7 +5,10 @@ namespace abcindustrialtx.Business.Interfaces
 {
     public interface ICatMaterialesBLL
     {
-        CatHilosMateriales Insert(CatHilosMateriales entidad);
-        IQueryable<CatHilosMateriales> Get();
+        CatMaterial Insert(CatMaterial entidad);
+        IQueryable<CatMaterial> GetMateriales();
+        CatMaterial GetMaterialById(int id);
+        void Delete(CatMaterial entidad);
+        void Update(CatMaterial entidad, int id);
     }
 }

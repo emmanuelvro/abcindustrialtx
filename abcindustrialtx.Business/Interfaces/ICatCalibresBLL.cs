@@ -8,10 +8,10 @@ namespace abcindustrialtx.Business.Interfaces
 {
     public interface ICatCalibresBLL
     {
-        //CatColores GetById(int id);
-        //Task<CatColores> GetByIdAsync(int id);
-        IQueryable<CatCalibre> Get();
         CatCalibre Insert(CatCalibre entidad);
-        //Task<List<CatColores>> GetAsync();
+        IQueryable<CatCalibre> GetCalibres();
+        CatCalibre GetCalibreById(int id);
+        void Delete(CatCalibre entidad);
+        void Update(CatCalibre entidad, int id);
     }
 }

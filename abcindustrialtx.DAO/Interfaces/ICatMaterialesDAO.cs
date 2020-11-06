@@ -2,7 +2,7 @@
 
 namespace abcindustrialtx.DAO.Interfaces
 {
-    public interface ICatMaterialesDAO: IGlobalDAO<CatHilosMateriales>
+    public interface ICatMaterialesDAO: IGlobalDAO<CatMaterial>
     {
     }
 }

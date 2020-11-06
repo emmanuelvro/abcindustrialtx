@@ -7,14 +7,12 @@ namespace abcindustrialtx.Entities
     {
         public CatCalibre()
         {
-            TblProducto = new HashSet<TblProducto>();
+            HilosProductos = new HashSet<HilosProductos>();
         }
 
         public int IdCalibre { get; set; }
-        public float CalibreDesc { get; set; }
-        public DateTime FechaAlta { get; set; }
-        public byte? Activo { get; set; }
+        public bool Activo { get; set; }
 
-        public virtual ICollection<TblProducto> TblProducto { get; set; }
+        public virtual ICollection<HilosProductos> HilosProductos { get; set; }
     }
 }

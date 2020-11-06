@@ -7,10 +7,10 @@ using System.Text;
 
 namespace abcindustrialtx.DAO.Repository
 {
-    public class CatMaterialesRepository : Global<CatMaterial>, ICatMaterialesDAO
+    public class CatPresentacionRepository: Global<CatPresentacion>, ICatPresentacionDAO
     {
         private readonly AbcIndustrialDbContext _context;
-        public CatMaterialesRepository(AbcIndustrialDbContext context): base (context)
+        public CatPresentacionRepository(AbcIndustrialDbContext context) : base(context)
         {
             _context = context;
         }

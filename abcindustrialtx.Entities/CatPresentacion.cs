@@ -5,11 +5,16 @@ namespace abcindustrialtx.Entities
 {
     public partial class CatPresentacion
     {
-        public int IdPresentacion { get; set; }
-        public string PresentaciónDesc { get; set; }
-        public float? Cantidad { get; set; }
-        public byte Activo { get; set; }
+        public CatPresentacion()
+        {
+            ProductoPresentacion = new HashSet<ProductoPresentacion>();
+        }
 
-        public virtual ProductoPresentacion ProductoPresentacion { get; set; }
+        public int IdPresentacion { get; set; }
+        public string Presentacion { get; set; }
+        public decimal Cantidad { get; set; }
+        public bool Activo { get; set; }
+
+        public virtual ICollection<ProductoPresentacion> ProductoPresentacion { get; set; }
     }
 }

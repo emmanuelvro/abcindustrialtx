@@ -2,6 +2,8 @@
 using abcindustrialtx.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace abcindustrialtx.API.Controllers
 {
@@ -16,20 +18,74 @@ namespace abcindustrialtx.API.Controllers
             _catCalibre = catCalibre;
             _mapper = mapper;
         }
+        [HttpGet]
+        public IActionResult GetAllCalibres()
+        {
+            return Ok(_catCalibre.GetCalibres());
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetUserById(int id)
+        {
+            return Ok(_catCalibre.GetCalibreById(id));
+        }
+
         [HttpPost("insertcalibre")]
         public IActionResult InsertCalibre(CatCalibre calibres)
         {
             var calibre = _mapper.Map<CatCalibre>(calibres);
 
-                _catCalibre.Insert(calibre);
+            _catCalibre.Insert(calibre);
 
             return Ok();
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpDelete("{id}")]
+        public ActionResult<CatCalibre> Delete(int id)
         {
-            return Ok(_catCalibre.Get());
+            CatCalibre existeCalibre = _catCalibre.GetCalibreById(id);
+
+            if (existeCalibre == null)
+            {
+                return NotFound();
+            }
+
+            _catCalibre.Delete(existeCalibre);
+
+            return existeCalibre;
         }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateCalibre(int id, CatCalibre entidad)
+        {
+            if (id != entidad.IdCalibre)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                _catCalibre.Update(entidad, id);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CalibreExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool CalibreExists(int id)
+        {
+            return _catCalibre.GetCalibres().Any(e => e.IdCalibre == id);
+        }
+   
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
+using abcindustrialtx.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using abcindustrialtx.Entities;
 
 namespace abcindustrialtx.DAO
 {
@@ -18,20 +18,18 @@ namespace abcindustrialtx.DAO
 
         public virtual DbSet<CatCalibre> CatCalibre { get; set; }
         public virtual DbSet<CatColores> CatColores { get; set; }
-        public virtual DbSet<CatHilosMateriales> CatHilosMateriales { get; set; }
+        public virtual DbSet<CatMaterial> CatMaterial { get; set; }
         public virtual DbSet<CatPresentacion> CatPresentacion { get; set; }
-        public virtual DbSet<CatUsuario> CatUsuario { get; set; }
-        public virtual DbSet<ColoresProductos> ColoresProductos { get; set; }
-        public virtual DbSet<DetallePedido> DetallePedido { get; set; }
         public virtual DbSet<DetallesLogs> DetallesLogs { get; set; }
-        public virtual DbSet<HilosExistenciaMateriales> HilosExistenciaMateriales { get; set; }
+        public virtual DbSet<ExistenciaMateriales> ExistenciaMateriales { get; set; }
         public virtual DbSet<HilosExistencias> HilosExistencias { get; set; }
-        public virtual DbSet<Pedidos> Pedidos { get; set; }
+        public virtual DbSet<HilosProductoMaterial> HilosProductoMaterial { get; set; }
+        public virtual DbSet<HilosProductos> HilosProductos { get; set; }
+        public virtual DbSet<HilosProductosPedidos> HilosProductosPedidos { get; set; }
         public virtual DbSet<ProductoPresentacion> ProductoPresentacion { get; set; }
-        public virtual DbSet<ProductosMateriales> ProductosMateriales { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
-        public virtual DbSet<TblProducto> TblProducto { get; set; }
-        public virtual DbSet<UsuarioRoles> UsuarioRoles { get; set; }
+        public virtual DbSet<Usuarios> Usuarios { get; set; }
+        public virtual DbSet<UsuariosRoles> UsuariosRoles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -55,18 +53,9 @@ namespace abcindustrialtx.DAO
                     .HasColumnName("id_calibre")
                     .HasColumnType("int unsigned");
 
-                entity.Property(e => e.CalibreDesc)
-                    .IsRequired()
-                    .HasColumnName("calibre_desc")
-                    .HasColumnType("float unsigned");
-
-                entity.Property(e => e.FechaAlta)
-                    .HasColumnName("fecha_alta")
-                    .HasColumnType("date");
-
                 entity.Property(e => e.Activo)
                     .HasColumnName("activo")
-                    .HasColumnType("tinyint unsigned");
+                    .HasColumnType("bit(1)");
             });
 
             modelBuilder.Entity<CatColores>(entity =>
@@ -80,51 +69,45 @@ namespace abcindustrialtx.DAO
                     .HasColumnName("id_color")
                     .HasColumnType("int unsigned");
 
-                entity.Property(e => e.Activo).HasColumnName("activo");
-
-                entity.Property(e => e.FechaAlta)
-                    .HasColumnName("fecha_alta")
-                    .HasColumnType("date");
+                entity.Property(e => e.Activo)
+                    .HasColumnName("activo")
+                    .HasColumnType("bit(1)");
 
                 entity.Property(e => e.HexadecimalColor)
                     .IsRequired()
                     .HasColumnName("hexadecimal_color")
-                    .HasMaxLength(6);
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.NombreDesc)
+                entity.Property(e => e.Nombre)
                     .IsRequired()
-                    .HasColumnName("nombre_desc")
-                    .HasMaxLength(75);
+                    .HasColumnName("nombre")
+                    .HasMaxLength(100);
             });
 
-            modelBuilder.Entity<CatHilosMateriales>(entity =>
+            modelBuilder.Entity<CatMaterial>(entity =>
             {
-                entity.HasKey(e => e.IdMateriales)
+                entity.HasKey(e => e.IdMaterial)
                     .HasName("PRIMARY");
 
-                entity.ToTable("cat_hilos_materiales");
+                entity.ToTable("cat_material");
 
-                entity.Property(e => e.IdMateriales)
-                    .HasColumnName("id_materiales")
+                entity.Property(e => e.IdMaterial)
+                    .HasColumnName("id_material")
                     .HasColumnType("int unsigned");
 
                 entity.Property(e => e.Activo)
                     .HasColumnName("activo")
-                    .HasColumnType("tinyint unsigned");
+                    .HasColumnType("bit(1)");
 
                 entity.Property(e => e.ColorMaterial)
                     .IsRequired()
                     .HasColumnName("color_material")
-                    .HasMaxLength(85);
-
-                entity.Property(e => e.FechaAlta)
-                .HasColumnName("fecha_alta")
-                .HasColumnType("datetime");
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.NombreMaterial)
                     .IsRequired()
                     .HasColumnName("nombre_material")
-                    .HasMaxLength(85);
+                    .HasMaxLength(100);
             });
 
             modelBuilder.Entity<CatPresentacion>(entity =>
@@ -138,126 +121,18 @@ namespace abcindustrialtx.DAO
                     .HasColumnName("id_presentacion")
                     .HasColumnType("int unsigned");
 
-                entity.Property(e => e.Activo).HasColumnType("tinyint unsigned");
-
-                entity.Property(e => e.Cantidad).HasColumnName("cantidad");
-
-                entity.Property(e => e.PresentaciónDesc)
-                    .HasColumnName("presentación_desc")
-                    .HasMaxLength(250);
-            });
-
-            modelBuilder.Entity<CatUsuario>(entity =>
-            {
-                entity.HasKey(e => e.IdUsuario)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("cat_usuario");
-
-                entity.Property(e => e.IdUsuario)
-                    .HasColumnName("id_usuario")
-                    .HasColumnType("int unsigned");
-
-                entity.Property(e => e.Correo)
-                    .HasColumnName("correo")
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.IdRol)
-                    .HasColumnName("id_rol")
-                    .HasMaxLength(45);
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasColumnName("password")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Telefono)
-                    .HasColumnName("telefono")
-                    .HasColumnType("int unsigned");
-
-                entity.Property(e => e.Username)
-                    .IsRequired()
-                    .HasColumnName("username")
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.UsrActivo)
-                    .HasColumnName("usr_activo")
-                    .HasColumnType("tinyint unsigned");
-
-                entity.Property(e => e.PasswordSalt)
-                    .HasColumnName("password_salt")
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.FechaAlta)
-                .HasColumnName("fecha_alta")
-                .HasColumnType("datetime");
-            });
-                
-            modelBuilder.Entity<ColoresProductos>(entity =>
-            {
-                entity.HasKey(e => e.IdcoloresProductos)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("colores_productos");
-
-                entity.HasIndex(e => e.IdColor)
-                    .HasName("fk_colores_productos_cat_colores1_idx");
-
-                entity.HasIndex(e => e.IdProducto)
-                    .HasName("fk_colores_productos_tbl_producto1_idx");
-
-                entity.Property(e => e.IdcoloresProductos)
-                    .HasColumnName("idcolores_productos")
-                    .HasColumnType("int unsigned");
-
                 entity.Property(e => e.Activo)
                     .HasColumnName("activo")
-                    .HasColumnType("tinyint unsigned");
+                    .HasColumnType("bit(1)");
 
-                entity.Property(e => e.IdColor)
-                    .HasColumnName("id_color")
-                    .HasColumnType("int unsigned");
+                entity.Property(e => e.Cantidad)
+                    .HasColumnName("cantidad")
+                    .HasColumnType("decimal(10,2)");
 
-                entity.Property(e => e.IdProducto)
-                    .HasColumnName("id_producto")
-                    .HasColumnType("int unsigned");
-
-                entity.HasOne(d => d.IdColorNavigation)
-                    .WithMany(p => p.ColoresProductos)
-                    .HasForeignKey(d => d.IdColor)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_colores_productos_cat_colores1");
-
-                entity.HasOne(d => d.IdProductoNavigation)
-                    .WithMany(p => p.ColoresProductos)
-                    .HasForeignKey(d => d.IdProducto)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_colores_productos_tbl_producto1");
-            });
-
-            modelBuilder.Entity<DetallePedido>(entity =>
-            {
-                entity.HasKey(e => e.IdDetallePedido)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("detalle_pedido");
-
-                entity.HasIndex(e => e.IdPedido)
-                    .HasName("fk_detalle_pedido_Pedidos1_idx");
-
-                entity.Property(e => e.IdDetallePedido)
-                    .HasColumnName("id_detalle_pedido")
-                    .HasColumnType("int unsigned");
-
-                entity.Property(e => e.IdPedido)
-                    .HasColumnName("id_pedido")
-                    .HasColumnType("int unsigned");
-
-                entity.HasOne(d => d.IdPedidoNavigation)
-                    .WithMany(p => p.DetallePedido)
-                    .HasForeignKey(d => d.IdPedido)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_detalle_pedido_Pedidos1");
+                entity.Property(e => e.Presentacion)
+                    .IsRequired()
+                    .HasColumnName("presentacion")
+                    .HasMaxLength(250);
             });
 
             modelBuilder.Entity<DetallesLogs>(entity =>
@@ -269,171 +144,246 @@ namespace abcindustrialtx.DAO
 
                 entity.Property(e => e.IdLogs)
                     .HasColumnName("id_logs")
-                    .HasColumnType("int unsigned");
+                    .HasMaxLength(36)
+                    .IsFixedLength();
 
-                entity.Property(e => e.IdTransaccion)
+                entity.Property(e => e.AuditType)
                     .IsRequired()
-                    .HasColumnName("id_transaccion")
-                    .HasMaxLength(15);
-
-                entity.Property(e => e.IdUsuario)
-                    .HasColumnName("id_usuario")
-                    .HasColumnType("int unsigned");
-
-                entity.Property(e => e.NombreTabla)
-                    .IsRequired()
-                    .HasColumnName("nombre_tabla")
+                    .HasColumnName("audit_type")
                     .HasMaxLength(50);
+
+                entity.Property(e => e.AuditUsername)
+                    .IsRequired()
+                    .HasColumnName("audit_username")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ChangedColumns)
+                    .HasColumnName("changed_columns")
+                    .HasMaxLength(0);
+
+                entity.Property(e => e.KeyValues)
+                    .HasColumnName("key_values")
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.NewValues)
+                    .HasColumnName("new_values")
+                    .HasMaxLength(0);
+
+                entity.Property(e => e.OldValues)
+                    .HasColumnName("old_values")
+                    .HasMaxLength(0);
+
+                entity.Property(e => e.TableName)
+                    .HasColumnName("table_name")
+                    .HasMaxLength(150);
             });
 
-            modelBuilder.Entity<HilosExistenciaMateriales>(entity =>
+            modelBuilder.Entity<ExistenciaMateriales>(entity =>
             {
-                entity.HasKey(e => e.IdMateriales)
+                entity.HasKey(e => e.IdExistenciaMaterial)
                     .HasName("PRIMARY");
 
-                entity.ToTable("hilos_existencia_materiales");
+                entity.ToTable("existencia_materiales");
 
-                entity.HasIndex(e => e.IdMateriales)
-                    .HasName("fk_hilos_existencia_composicion_hilos_composicion1_idx");
+                entity.HasIndex(e => e.IdMaterial)
+                    .HasName("IXFK_existencia_materiales_cat_material");
 
-                entity.Property(e => e.IdMateriales)
-                    .HasColumnName("id_materiales")
+                entity.Property(e => e.IdExistenciaMaterial)
+                    .HasColumnName("id_existencia_material")
                     .HasColumnType("int unsigned");
 
-                entity.HasOne(d => d.IdMaterialesNavigation)
-                    .WithOne(p => p.HilosExistenciaMateriales)
-                    .HasForeignKey<HilosExistenciaMateriales>(d => d.IdMateriales)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_hilos_existencia_composicion_hilos_composicion1");
+                entity.Property(e => e.FechaModificacion)
+                    .HasColumnName("fecha_modificacion")
+                    .HasColumnType("bit(1)");
+
+                entity.Property(e => e.IdMaterial)
+                    .HasColumnName("id_material")
+                    .HasColumnType("int unsigned");
+
+                entity.HasOne(d => d.IdMaterialNavigation)
+                    .WithMany(p => p.ExistenciaMateriales)
+                    .HasForeignKey(d => d.IdMaterial)
+                    .HasConstraintName("FK_existencia_materiales_cat_material");
             });
 
             modelBuilder.Entity<HilosExistencias>(entity =>
             {
-                entity.HasKey(e => e.IdColor)
+                entity.HasKey(e => e.IdExistencia)
                     .HasName("PRIMARY");
 
                 entity.ToTable("hilos_existencias");
+
+                entity.Property(e => e.IdExistencia)
+                    .HasColumnName("id_existencia")
+                    .HasColumnType("int unsigned");
+
+                entity.Property(e => e.Cantidad).HasColumnName("cantidad");
+
+                entity.Property(e => e.CantidadBobinas).HasColumnName("cantidad_bobinas");
+
+                entity.Property(e => e.IdColor)
+                    .HasColumnName("id_color")
+                    .HasColumnType("int unsigned");
+            });
+
+            modelBuilder.Entity<HilosProductoMaterial>(entity =>
+            {
+                entity.HasKey(e => new { e.IdHilosproducto, e.IdMaterial })
+                    .HasName("PRIMARY");
+
+                entity.ToTable("hilos_producto_material");
+
+                entity.HasIndex(e => e.IdHilosproducto)
+                    .HasName("IXFK_hilos_producto_material_hilos_productos");
+
+                entity.HasIndex(e => e.IdMaterial)
+                    .HasName("IXFK_hilos_producto_material_cat_material");
+
+                entity.Property(e => e.IdHilosproducto)
+                    .HasColumnName("id_hilosproducto")
+                    .HasColumnType("int unsigned");
+
+                entity.Property(e => e.IdMaterial)
+                    .HasColumnName("id_material")
+                    .HasColumnType("int unsigned");
+
+                entity.Property(e => e.Activo)
+                    .HasColumnName("activo")
+                    .HasColumnType("bit(1)");
+
+                entity.HasOne(d => d.IdHilosproductoNavigation)
+                    .WithMany(p => p.HilosProductoMaterial)
+                    .HasForeignKey(d => d.IdHilosproducto)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_hilos_producto_material_hilos_productos");
+
+                entity.HasOne(d => d.IdMaterialNavigation)
+                    .WithMany(p => p.HilosProductoMaterial)
+                    .HasForeignKey(d => d.IdMaterial)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_hilos_producto_material_cat_material");
+            });
+
+            modelBuilder.Entity<HilosProductos>(entity =>
+            {
+                entity.HasKey(e => e.IdHilosproducto)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("hilos_productos");
+
+                entity.HasIndex(e => e.IdCalibre)
+                    .HasName("IXFK_hilos_productos_cat_calibre");
+
+                entity.HasIndex(e => e.IdColor)
+                    .HasName("IXFK_hilos_productos_cat_colores");
+
+                entity.HasIndex(e => e.IdExistencia)
+                    .HasName("IXFK_hilos_productos_hilos_existencias");
+
+                entity.Property(e => e.IdHilosproducto)
+                    .HasColumnName("id_hilosproducto")
+                    .HasColumnType("int unsigned");
+
+                entity.Property(e => e.Activo)
+                    .HasColumnName("activo")
+                    .HasColumnType("bit(1)");
+
+                entity.Property(e => e.Descripcion).HasColumnName("descripcion");
+
+                entity.Property(e => e.IdCalibre)
+                    .HasColumnName("id_calibre")
+                    .HasColumnType("int unsigned");
 
                 entity.Property(e => e.IdColor)
                     .HasColumnName("id_color")
                     .HasColumnType("int unsigned");
 
-                entity.Property(e => e.CantidadBobinas)
-                    .HasColumnName("cantidad_bobinas")
+                entity.Property(e => e.IdExistencia)
+                    .HasColumnName("id_existencia")
                     .HasColumnType("int unsigned");
 
-                entity.Property(e => e.CantidadExistente)
-                    .HasColumnName("cantidad_existente")
-                    .HasColumnType("int unsigned");
+                entity.Property(e => e.PorcentajeColor)
+                    .HasColumnName("porcentaje_color")
+                    .HasColumnType("decimal(3,0)");
+
+                entity.HasOne(d => d.IdCalibreNavigation)
+                    .WithMany(p => p.HilosProductos)
+                    .HasForeignKey(d => d.IdCalibre)
+                    .HasConstraintName("FK_hilos_productos_cat_calibre");
 
                 entity.HasOne(d => d.IdColorNavigation)
-                    .WithOne(p => p.HilosExistencias)
-                    .HasForeignKey<HilosExistencias>(d => d.IdColor)
+                    .WithMany(p => p.HilosProductos)
+                    .HasForeignKey(d => d.IdColor)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_hilos_existencias_hilos_colores");
+                    .HasConstraintName("FK_hilos_productos_cat_colores");
+
+                entity.HasOne(d => d.IdExistenciaNavigation)
+                    .WithMany(p => p.HilosProductos)
+                    .HasForeignKey(d => d.IdExistencia)
+                    .HasConstraintName("FK_hilos_productos_hilos_existencias");
             });
 
-            modelBuilder.Entity<Pedidos>(entity =>
+            modelBuilder.Entity<HilosProductosPedidos>(entity =>
             {
-                entity.HasKey(e => e.IdPedido)
+                entity.HasKey(e => e.IdDetallePedido)
                     .HasName("PRIMARY");
 
-                entity.ToTable("pedidos");
+                entity.ToTable("hilos_productos_pedidos");
 
-                entity.Property(e => e.IdPedido)
-                    .HasColumnName("id_pedido")
+                entity.HasIndex(e => e.IdHilosproducto)
+                    .HasName("IXFK_hilos_productos_pedidos_hilos_productos");
+
+                entity.Property(e => e.IdDetallePedido)
+                    .HasColumnName("id_detalle_pedido")
+                    .HasColumnType("bigint unsigned");
+
+                entity.Property(e => e.IdHilosproducto)
+                    .HasColumnName("id_hilosproducto")
                     .HasColumnType("int unsigned");
 
-                entity.Property(e => e.IdProducto)
-                    .HasColumnName("id_producto")
-                    .HasColumnType("int unsigned");
-
-                entity.HasOne(d => d.IdPedidoNavigation)
-                    .WithOne(p => p.Pedidos)
-                    .HasForeignKey<Pedidos>(d => d.IdPedido)
+                entity.HasOne(d => d.IdHilosproductoNavigation)
+                    .WithMany(p => p.HilosProductosPedidos)
+                    .HasForeignKey(d => d.IdHilosproducto)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_Pedidos_tbl_producto1");
+                    .HasConstraintName("FK_hilos_productos_pedidos_hilos_productos");
             });
 
             modelBuilder.Entity<ProductoPresentacion>(entity =>
             {
-                entity.HasKey(e => e.IdproductoPresentacion)
+                entity.HasKey(e => new { e.IdPresentacion, e.IdHilosproducto })
                     .HasName("PRIMARY");
 
                 entity.ToTable("producto_presentacion");
 
-                entity.HasIndex(e => e.IdProducto)
-                    .HasName("fk_producto_presentacion_tbl_producto1_idx");
+                entity.HasIndex(e => e.IdHilosproducto)
+                    .HasName("IXFK_producto_presentacion_hilos_productos");
 
-                entity.Property(e => e.IdproductoPresentacion)
-                    .HasColumnName("idproducto_presentacion")
-                    .HasColumnType("int unsigned");
-
-                entity.Property(e => e.Activo)
-                    .HasColumnName("activo")
-                    .HasColumnType("tinyint unsigned");
+                entity.HasIndex(e => e.IdPresentacion)
+                    .HasName("IXFK_producto_presentacion_cat_presentacion");
 
                 entity.Property(e => e.IdPresentacion)
                     .HasColumnName("id_presentacion")
                     .HasColumnType("int unsigned");
 
-                entity.Property(e => e.IdProducto)
-                    .HasColumnName("id_producto")
-                    .HasColumnType("int unsigned");
-
-                entity.HasOne(d => d.IdProductoNavigation)
-                    .WithMany(p => p.ProductoPresentacion)
-                    .HasForeignKey(d => d.IdProducto)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_producto_presentacion_tbl_producto1");
-
-                entity.HasOne(d => d.IdproductoPresentacionNavigation)
-                    .WithOne(p => p.ProductoPresentacion)
-                    .HasForeignKey<ProductoPresentacion>(d => d.IdproductoPresentacion)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_producto_presentacion_cat_presentacion1");
-            });
-
-            modelBuilder.Entity<ProductosMateriales>(entity =>
-            {
-                entity.HasKey(e => e.IdproductosMateriales)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("productos_materiales");
-
-                entity.HasIndex(e => e.IdMateriales)
-                    .HasName("fk_productos_materiales_cat_hilos_materiales1_idx");
-
-                entity.HasIndex(e => e.IdProducto)
-                    .HasName("fk_productos_materiales_tbl_producto1_idx");
-
-                entity.Property(e => e.IdproductosMateriales)
-                    .HasColumnName("idproductos_materiales")
+                entity.Property(e => e.IdHilosproducto)
+                    .HasColumnName("id_hilosproducto")
                     .HasColumnType("int unsigned");
 
                 entity.Property(e => e.Activo)
                     .HasColumnName("activo")
-                    .HasColumnType("tinyint unsigned");
+                    .HasColumnType("bit(1)");
 
-                entity.Property(e => e.IdMateriales)
-                    .HasColumnName("id_materiales")
-                    .HasColumnType("int unsigned");
-
-                entity.Property(e => e.IdProducto)
-                    .HasColumnName("id_producto")
-                    .HasColumnType("int unsigned");
-
-                entity.HasOne(d => d.IdMaterialesNavigation)
-                    .WithMany(p => p.ProductosMateriales)
-                    .HasForeignKey(d => d.IdMateriales)
+                entity.HasOne(d => d.IdHilosproductoNavigation)
+                    .WithMany(p => p.ProductoPresentacion)
+                    .HasForeignKey(d => d.IdHilosproducto)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_productos_materiales_cat_hilos_materiales1");
+                    .HasConstraintName("FK_producto_presentacion_hilos_productos");
 
-                entity.HasOne(d => d.IdProductoNavigation)
-                    .WithMany(p => p.ProductosMateriales)
-                    .HasForeignKey(d => d.IdProducto)
+                entity.HasOne(d => d.IdPresentacionNavigation)
+                    .WithMany(p => p.ProductoPresentacion)
+                    .HasForeignKey(d => d.IdPresentacion)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_productos_materiales_tbl_producto1");
+                    .HasConstraintName("FK_producto_presentacion_cat_presentacion");
             });
 
             modelBuilder.Entity<Roles>(entity =>
@@ -448,69 +398,78 @@ namespace abcindustrialtx.DAO
                     .HasColumnType("int unsigned");
 
                 entity.Property(e => e.NombreRol)
-                    .IsRequired()
                     .HasColumnName("nombre_rol")
-                    .HasMaxLength(45);
+                    .HasMaxLength(50);
             });
 
-            modelBuilder.Entity<TblProducto>(entity =>
+            modelBuilder.Entity<Usuarios>(entity =>
             {
-                entity.HasKey(e => e.IdProducto)
+                entity.HasKey(e => e.IdUsuario)
                     .HasName("PRIMARY");
 
-                entity.ToTable("tbl_producto");
-
-                entity.HasIndex(e => e.IdCalibre)
-                    .HasName("fk_tbl_producto_cat_calibre1_idx");
-
-                entity.Property(e => e.IdProducto)
-                    .HasColumnName("id_producto")
-                    .HasColumnType("int unsigned");
-
-                entity.Property(e => e.Activo).HasColumnName("activo");
-
-                entity.Property(e => e.Descripcion)
-                    .HasColumnName("descripcion")
-                    .HasMaxLength(250);
-
-                entity.Property(e => e.IdCalibre)
-                    .HasColumnName("id_calibre")
-                    .HasColumnType("int unsigned");
-
-                entity.Property(e => e.IdColor)
-                    .HasColumnName("id_color")
-                    .HasColumnType("int unsigned");
-
-                entity.HasOne(d => d.IdCalibreNavigation)
-                    .WithMany(p => p.TblProducto)
-                    .HasForeignKey(d => d.IdCalibre)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_tbl_producto_cat_calibre1");
-            });
-
-            modelBuilder.Entity<UsuarioRoles>(entity =>
-            {
-                entity.HasKey(e => new { e.IdRol, e.IdUsuario })
-                    .HasName("PRIMARY");
-
-                entity.ToTable("usuario_roles");
-
-                entity.HasIndex(e => e.IdUsuario)
-                    .HasName("fk_usuario_roles_cat_usuario1");
-
-                entity.Property(e => e.IdRol)
-                    .HasColumnName("id_rol")
-                    .HasColumnType("int unsigned");
+                entity.ToTable("usuarios");
 
                 entity.Property(e => e.IdUsuario)
                     .HasColumnName("id_usuario")
                     .HasColumnType("int unsigned");
 
+                entity.Property(e => e.CorreoElectronico)
+                    .HasColumnName("correo_electronico")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PasswordHash).HasColumnName("password_hash");
+
+                entity.Property(e => e.PasswordSalt).HasColumnName("password_salt");
+
+                entity.Property(e => e.Telefono)
+                    .HasColumnName("telefono")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Username)
+                    .HasColumnName("username")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.UsrActivo)
+                    .HasColumnName("usr_activo")
+                    .HasColumnType("bit(1)");
+
+                entity.Property(e => e.FechaAlta)
+                    .HasColumnName("fecha_alta")
+                    .HasColumnType("date");
+            });
+
+            modelBuilder.Entity<UsuariosRoles>(entity =>
+            {
+                entity.HasKey(e => new { e.IdUsuario, e.IdRol })
+                    .HasName("PRIMARY");
+
+                entity.ToTable("usuarios_roles");
+
+                entity.HasIndex(e => e.IdRol)
+                    .HasName("IXFK_usuarios_roles_roles");
+
+                entity.HasIndex(e => e.IdUsuario)
+                    .HasName("IXFK_usuarios_roles_usuarios");
+
+                entity.Property(e => e.IdUsuario)
+                    .HasColumnName("id_usuario")
+                    .HasColumnType("int unsigned");
+
+                entity.Property(e => e.IdRol)
+                    .HasColumnName("id_rol")
+                    .HasColumnType("int unsigned");
+
+                entity.HasOne(d => d.IdRolNavigation)
+                    .WithMany(p => p.UsuariosRoles)
+                    .HasForeignKey(d => d.IdRol)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_usuarios_roles_roles");
+
                 entity.HasOne(d => d.IdUsuarioNavigation)
-                    .WithMany(p => p.UsuarioRoles)
+                    .WithMany(p => p.UsuariosRoles)
                     .HasForeignKey(d => d.IdUsuario)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_usuario_roles_cat_usuario1");
+                    .HasConstraintName("FK_usuarios_roles_usuarios");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -6,23 +6,23 @@ using System.Linq;
 
 namespace abcindustrialtx.DAO.Repository
 {
-    public class CatUsuarioRepository : Global<CatUsuario>, ICatUsuarioDAO
+    public class UsuariosRepository : Global<Usuarios>, IUsuariosDAO
     {
         private readonly AbcIndustrialDbContext _context = null;
-        public CatUsuarioRepository(AbcIndustrialDbContext context) : base(context)
+        public UsuariosRepository(AbcIndustrialDbContext context) : base(context)
         {
             _context = context;
         }
 
-        public CatUsuario Login(string username, string password)
+        public Usuarios Login(string username, string password)
         {
             if (!string.IsNullOrEmpty(username) || !string.IsNullOrEmpty(password))
             {
-                CatUsuario usuario = _context.CatUsuario.FirstOrDefault(p => p.Username == username.Trim() && p.UsrActivo == 1);
+                Usuarios usuario = _context.Usuarios.FirstOrDefault(p => p.Username == username.Trim() && p.UsrActivo == true);
 
                 if (usuario != null)
                 {
-                    if (AuthenticationAbc.VerificarHashPassword(password, usuario.PasswordSalt, usuario.Password))
+                    if (AuthenticationAbc.VerificarHashPassword(password, usuario.PasswordSalt, usuario.PasswordHash))
                     {
                         return usuario;
                     }

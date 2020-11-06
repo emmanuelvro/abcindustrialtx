@@ -5,9 +5,13 @@ namespace abcindustrialtx.Entities
 {
     public partial class DetallesLogs
     {
-        public int IdLogs { get; set; }
-        public string NombreTabla { get; set; }
-        public string IdTransaccion { get; set; }
-        public int IdUsuario { get; set; }
+        public string IdLogs { get; set; }
+        public string AuditType { get; set; }
+        public string AuditUsername { get; set; }
+        public string TableName { get; set; }
+        public string KeyValues { get; set; }
+        public string OldValues { get; set; }
+        public string NewValues { get; set; }
+        public string ChangedColumns { get; set; }
     }
 }

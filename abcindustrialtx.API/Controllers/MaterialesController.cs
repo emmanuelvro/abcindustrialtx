@@ -2,6 +2,8 @@
 using abcindustrialtx.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace abcindustrialtx.API.Controllers
 {
@@ -19,20 +21,75 @@ namespace abcindustrialtx.API.Controllers
             //_configuration = configuration;
         }
 
-        [HttpPost("insertmaterial")]
-        public IActionResult InsertMaterial(CatHilosMateriales materiales)
+        [HttpGet]
+        public IActionResult GetAllCalibres()
         {
-            var material = _mapper.Map<CatHilosMateriales>(materiales);
+            return Ok(_catMateriales.GetMateriales());
+        }
 
-                _catMateriales.Insert(material);
+        [HttpGet("{id}")]
+        public IActionResult GetUserById(int id)
+        {
+            return Ok(_catMateriales.GetMaterialById(id));
+        }
+
+        [HttpPost("insertmaterial")]
+        public IActionResult InsertMaterial(CatMaterial materiales)
+        {
+            var material = _mapper.Map<CatMaterial>(materiales);
+
+            _catMateriales.Insert(material);
 
             return Ok();
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpDelete("{id}")]
+        public ActionResult<CatMaterial> Delete(int id)
         {
-            return Ok(_catMateriales.Get());
+            CatMaterial existeMaterial = _catMateriales.GetMaterialById(id);
+
+            if (existeMaterial == null)
+            {
+                return NotFound();
+            }
+
+            _catMateriales.Delete(existeMaterial);
+
+            return existeMaterial;
         }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateMaterial(int id, CatMaterial entidad)
+        {
+            if (id != entidad.IdMaterial)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                _catMateriales.Update(entidad, id);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MaterialExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool MaterialExists(int id)
+        {
+            return _catMateriales.GetMateriales().Any(e => e.IdMaterial == id);
+        }
+
+   
     }
 }

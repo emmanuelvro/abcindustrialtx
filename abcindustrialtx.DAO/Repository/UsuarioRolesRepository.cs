@@ -4,10 +4,10 @@ using abcindustrialtx.Entities;
 
 namespace abcindustrialtx.DAO.Repository
 {
-    public class UsuarioRolesRepository : Global<UsuarioRoles>, IUsuarioRolesDAO
+    public class UsuariosRolesRepository : Global<UsuariosRoles>, IUsuariosRolesDAO
     {
         private readonly AbcIndustrialDbContext _context = null;
-        public UsuarioRolesRepository(AbcIndustrialDbContext context) : base(context)
+        public UsuariosRolesRepository(AbcIndustrialDbContext context) : base(context)
         {
             _context = context;
         }

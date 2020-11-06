@@ -7,36 +7,35 @@ using System.Linq;
 
 namespace abcindustrialtx.Business.Implements
 {
-    public class CatUsuarioBLL : ICatUsuarioBLL
+    public class UsuariosBLL : IUsuariosBLL
     {
-        private readonly ICatUsuarioDAO _catUsuarioDAO = null;
+        private readonly IUsuariosDAO _UsuariosDAO = null;
 
-        public CatUsuarioBLL(ICatUsuarioDAO catUsuarioDAO)
+        public UsuariosBLL(IUsuariosDAO UsuariosDAO)
         {
-            _catUsuarioDAO = catUsuarioDAO;
+            _UsuariosDAO = UsuariosDAO;
         }
 
-        public IQueryable<Entities.CatUsuario> GetUsers()
+        public IQueryable<Entities.Usuarios> GetUsers()
         {
-            return _catUsuarioDAO.Get();
+            return _UsuariosDAO.Get();
         }
 
-        public CatUsuario Insert(CatUsuario entidad)
+        public Usuarios Insert(Usuarios entidad)
         {
             string generarSalt = AuthenticationAbc.GenerarSalString();
 
-            entidad.Password = AuthenticationAbc.GenerarHash(entidad.Password, generarSalt);
+            entidad.PasswordHash = AuthenticationAbc.GenerarHash(entidad.PasswordHash, generarSalt);
             entidad.PasswordSalt = generarSalt;
             entidad.FechaAlta = DateTime.Now;
-            entidad.UsrActivo = 1;
-            entidad.IdRol = "1";
+            entidad.UsrActivo = true;
 
-            return _catUsuarioDAO.Insert(entidad);
+            return _UsuariosDAO.Insert(entidad);
         }
 
-        public CatUsuario Login(CatUsuario entidad)
+        public Usuarios Login(Usuarios entidad)
         {
-            return _catUsuarioDAO.Login(entidad.Username, entidad.Password);
+            return _UsuariosDAO.Login(entidad.Username, entidad.PasswordHash);
         }
 
 

@@ -7,11 +7,10 @@ namespace abcindustrialtx.Business.Interfaces
     public interface ICatColoresBLL
     {
         CatColores Insert(CatColores entidad);
-        //CatColores GetById(int id);
-        //Task<CatColores> GetByIdAsync(int id);
-        IQueryable<CatColores> Get();
-        //List<CatColores> Get();
-        //Task<List<CatColores>> GetAsync();
+        IQueryable<CatColores> GetColors();
+        CatColores GetColorById(int id);
+        void Delete(CatColores entidad);
+        void Update(CatColores entidad, int id);
     }
 }
 

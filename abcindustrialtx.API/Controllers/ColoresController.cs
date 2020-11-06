@@ -2,6 +2,8 @@
 using abcindustrialtx.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace abcindustrialtx.API.Controllers
 {
@@ -19,21 +21,71 @@ namespace abcindustrialtx.API.Controllers
             //_configuration = configuration;
         }
 
+        [HttpGet]
+        public IActionResult GetAllColors()
+        {
+            return Ok(_catColores.GetColors());
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetColorsById(int id)
+        {
+            return Ok(_catColores.GetColorById(id));
+        }
+
         [HttpPost("insertcolor")]
         public IActionResult InsertColor(CatColores colores)
         {
             var color = _mapper.Map<CatColores>(colores);
-            if (!ModelState.IsValid) 
-            {
+
                 _catColores.Insert(color);
-            }
+
             return Ok();
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpDelete("{id}")]
+        public ActionResult<CatColores> Delete(int id)
         {
-            return Ok(_catColores.Get());
+            CatColores existeColor = _catColores.GetColorById(id);
+
+            if (existeColor == null)
+            {
+                return NotFound();
+            }
+
+            _catColores.Delete(existeColor);
+
+            return existeColor;
+        }
+        [HttpPut("{id}")]
+        public IActionResult UpdateColors(int id, CatColores entidad)
+        {
+            if (id != entidad.IdColor)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                _catColores.Update(entidad, id);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ColorsExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+        private bool ColorsExists(int id)
+        {
+            return _catColores.GetColors().Any(e => e.IdColor == id);
         }
     }
 }
