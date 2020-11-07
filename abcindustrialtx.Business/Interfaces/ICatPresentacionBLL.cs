@@ -10,6 +10,9 @@ namespace abcindustrialtx.Business.Interfaces
     public interface ICatPresentacionBLL
     {
         CatPresentacion Insert(CatPresentacion entidad);
-        IQueryable<CatPresentacion>Get();
+        IQueryable<CatPresentacion> GetPresentacion();
+        CatPresentacion GetPresentacionById(int id);
+        void Delete(CatPresentacion entidad);
+        void Update(CatPresentacion entidad, int id);
     }
 }

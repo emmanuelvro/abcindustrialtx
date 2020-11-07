@@ -18,7 +18,7 @@ namespace abcindustrialtx.DAO.Repository
         {
             if (!string.IsNullOrEmpty(username) || !string.IsNullOrEmpty(password))
             {
-                Usuarios usuario = _context.Usuarios.FirstOrDefault(p => p.Username == username.Trim() && p.UsrActivo == true);
+                Usuarios usuario = _context.Usuarios.FirstOrDefault(p => p.Username == username.Trim() && p.UsrActivo == 1);
 
                 if (usuario != null)
                 {

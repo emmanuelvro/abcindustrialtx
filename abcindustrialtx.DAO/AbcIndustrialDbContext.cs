@@ -1,7 +1,5 @@
-﻿using System;
-using abcindustrialtx.Entities;
+﻿using abcindustrialtx.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace abcindustrialtx.DAO
 {
@@ -33,11 +31,11 @@ namespace abcindustrialtx.DAO
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=root;database=abcindustrial_db");
-//            }
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=root;database=abcindustrial_db");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -56,6 +54,12 @@ namespace abcindustrialtx.DAO
                 entity.Property(e => e.Activo)
                     .HasColumnName("activo")
                     .HasColumnType("bit(1)");
+
+                entity.Property(e => e.Calibre)
+                    .HasColumnName("calibre")
+                    .HasColumnType("decimal(10,2) unsigned");
+
+                entity.Property(e => e.FechaModificacion).HasColumnName("fecha_modificacion");
             });
 
             modelBuilder.Entity<CatColores>(entity =>
@@ -73,15 +77,19 @@ namespace abcindustrialtx.DAO
                     .HasColumnName("activo")
                     .HasColumnType("bit(1)");
 
+                entity.Property(e => e.FechaAlta).HasColumnName("fecha_alta");
+
                 entity.Property(e => e.HexadecimalColor)
                     .IsRequired()
                     .HasColumnName("hexadecimal_color")
-                    .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Nombre)
                     .IsRequired()
                     .HasColumnName("nombre")
-                    .HasMaxLength(100);
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<CatMaterial>(entity =>
@@ -102,12 +110,16 @@ namespace abcindustrialtx.DAO
                 entity.Property(e => e.ColorMaterial)
                     .IsRequired()
                     .HasColumnName("color_material")
-                    .HasMaxLength(100);
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaAlta).HasColumnName("fecha_alta");
 
                 entity.Property(e => e.NombreMaterial)
                     .IsRequired()
                     .HasColumnName("nombre_material")
-                    .HasMaxLength(100);
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<CatPresentacion>(entity =>
@@ -127,12 +139,15 @@ namespace abcindustrialtx.DAO
 
                 entity.Property(e => e.Cantidad)
                     .HasColumnName("cantidad")
-                    .HasColumnType("decimal(10,2)");
+                    .HasColumnType("decimal(10,2) unsigned");
+
+                entity.Property(e => e.FechaAlta).HasColumnName("fecha_alta");
 
                 entity.Property(e => e.Presentacion)
                     .IsRequired()
                     .HasColumnName("presentacion")
-                    .HasMaxLength(250);
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<DetallesLogs>(entity =>
@@ -147,35 +162,44 @@ namespace abcindustrialtx.DAO
                     .HasMaxLength(36)
                     .IsFixedLength();
 
+                entity.Property(e => e.AuditDatetimeUtc).HasColumnName("audit_datetime_utc");
+
                 entity.Property(e => e.AuditType)
                     .IsRequired()
                     .HasColumnName("audit_type")
-                    .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.AuditUsername)
                     .IsRequired()
                     .HasColumnName("audit_username")
-                    .HasMaxLength(100);
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.ChangedColumns)
                     .HasColumnName("changed_columns")
-                    .HasMaxLength(0);
+                    .HasMaxLength(0)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.KeyValues)
                     .HasColumnName("key_values")
-                    .HasMaxLength(250);
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.NewValues)
                     .HasColumnName("new_values")
-                    .HasMaxLength(0);
+                    .HasMaxLength(0)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.OldValues)
                     .HasColumnName("old_values")
-                    .HasMaxLength(0);
+                    .HasMaxLength(0)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.TableName)
                     .HasColumnName("table_name")
-                    .HasMaxLength(150);
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<ExistenciaMateriales>(entity =>
@@ -192,9 +216,11 @@ namespace abcindustrialtx.DAO
                     .HasColumnName("id_existencia_material")
                     .HasColumnType("int unsigned");
 
-                entity.Property(e => e.FechaModificacion)
-                    .HasColumnName("fecha_modificacion")
-                    .HasColumnType("bit(1)");
+                entity.Property(e => e.CantidadExistente)
+                    .HasColumnName("cantidad_existente")
+                    .HasColumnType("decimal(10,2) unsigned");
+
+                entity.Property(e => e.FechaModificacion).HasColumnName("fecha_modificacion");
 
                 entity.Property(e => e.IdMaterial)
                     .HasColumnName("id_material")
@@ -220,6 +246,8 @@ namespace abcindustrialtx.DAO
                 entity.Property(e => e.Cantidad).HasColumnName("cantidad");
 
                 entity.Property(e => e.CantidadBobinas).HasColumnName("cantidad_bobinas");
+
+                entity.Property(e => e.FechaAlta).HasColumnName("fecha_alta");
 
                 entity.Property(e => e.IdColor)
                     .HasColumnName("id_color")
@@ -250,6 +278,8 @@ namespace abcindustrialtx.DAO
                 entity.Property(e => e.Activo)
                     .HasColumnName("activo")
                     .HasColumnType("bit(1)");
+
+                entity.Property(e => e.FechaMoficicacion).HasColumnName("fecha_moficicacion");
 
                 entity.HasOne(d => d.IdHilosproductoNavigation)
                     .WithMany(p => p.HilosProductoMaterial)
@@ -290,6 +320,8 @@ namespace abcindustrialtx.DAO
 
                 entity.Property(e => e.Descripcion).HasColumnName("descripcion");
 
+                entity.Property(e => e.FechaModificacion).HasColumnName("fecha_modificacion");
+
                 entity.Property(e => e.IdCalibre)
                     .HasColumnName("id_calibre")
                     .HasColumnType("int unsigned");
@@ -304,7 +336,7 @@ namespace abcindustrialtx.DAO
 
                 entity.Property(e => e.PorcentajeColor)
                     .HasColumnName("porcentaje_color")
-                    .HasColumnType("decimal(3,0)");
+                    .HasColumnType("decimal(10,2) unsigned");
 
                 entity.HasOne(d => d.IdCalibreNavigation)
                     .WithMany(p => p.HilosProductos)
@@ -336,6 +368,12 @@ namespace abcindustrialtx.DAO
                 entity.Property(e => e.IdDetallePedido)
                     .HasColumnName("id_detalle_pedido")
                     .HasColumnType("bigint unsigned");
+
+                entity.Property(e => e.Cantidad)
+                    .HasColumnName("cantidad")
+                    .HasColumnType("decimal(10,2) unsigned");
+
+                entity.Property(e => e.FechaPedido).HasColumnName("fecha_pedido");
 
                 entity.Property(e => e.IdHilosproducto)
                     .HasColumnName("id_hilosproducto")
@@ -373,6 +411,8 @@ namespace abcindustrialtx.DAO
                     .HasColumnName("activo")
                     .HasColumnType("bit(1)");
 
+                entity.Property(e => e.FechaModificacion).HasColumnName("fecha_modificacion");
+
                 entity.HasOne(d => d.IdHilosproductoNavigation)
                     .WithMany(p => p.ProductoPresentacion)
                     .HasForeignKey(d => d.IdHilosproducto)
@@ -399,7 +439,8 @@ namespace abcindustrialtx.DAO
 
                 entity.Property(e => e.NombreRol)
                     .HasColumnName("nombre_rol")
-                    .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Usuarios>(entity =>
@@ -415,7 +456,10 @@ namespace abcindustrialtx.DAO
 
                 entity.Property(e => e.CorreoElectronico)
                     .HasColumnName("correo_electronico")
-                    .HasMaxLength(100);
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaAlta).HasColumnName("fecha_alta");
 
                 entity.Property(e => e.PasswordHash).HasColumnName("password_hash");
 
@@ -423,19 +467,17 @@ namespace abcindustrialtx.DAO
 
                 entity.Property(e => e.Telefono)
                     .HasColumnName("telefono")
-                    .HasMaxLength(10);
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Username)
                     .HasColumnName("username")
-                    .HasMaxLength(100);
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.UsrActivo)
                     .HasColumnName("usr_activo")
                     .HasColumnType("bit(1)");
-
-                entity.Property(e => e.FechaAlta)
-                    .HasColumnName("fecha_alta")
-                    .HasColumnType("date");
             });
 
             modelBuilder.Entity<UsuariosRoles>(entity =>

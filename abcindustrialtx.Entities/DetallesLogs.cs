@@ -6,6 +6,7 @@ namespace abcindustrialtx.Entities
     public partial class DetallesLogs
     {
         public string IdLogs { get; set; }
+        public DateTime AuditDatetimeUtc { get; set; }
         public string AuditType { get; set; }
         public string AuditUsername { get; set; }
         public string TableName { get; set; }

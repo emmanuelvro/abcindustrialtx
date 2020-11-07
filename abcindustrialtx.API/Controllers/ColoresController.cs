@@ -59,7 +59,7 @@ namespace abcindustrialtx.API.Controllers
         }
         [HttpPut("{id}")]
         public IActionResult UpdateColors(int id, CatColores entidad)
-        {
+         {
             if (id != entidad.IdColor)
             {
                 return BadRequest();

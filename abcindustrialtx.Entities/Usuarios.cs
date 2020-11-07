@@ -16,8 +16,8 @@ namespace abcindustrialtx.Entities
         public string PasswordSalt { get; set; }
         public string CorreoElectronico { get; set; }
         public string Telefono { get; set; }
-        public bool? UsrActivo { get; set; }
-        public DateTime FechaAlta { get; set; }
+        public short? UsrActivo { get; set; }
+        public DateTimeOffset? FechaAlta { get; set; }
 
         public virtual ICollection<UsuariosRoles> UsuariosRoles { get; set; }
     }

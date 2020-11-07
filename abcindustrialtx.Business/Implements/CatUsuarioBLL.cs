@@ -28,7 +28,7 @@ namespace abcindustrialtx.Business.Implements
             entidad.PasswordHash = AuthenticationAbc.GenerarHash(entidad.PasswordHash, generarSalt);
             entidad.PasswordSalt = generarSalt;
             entidad.FechaAlta = DateTime.Now;
-            entidad.UsrActivo = true;
+            entidad.UsrActivo = 1;
 
             return _UsuariosDAO.Insert(entidad);
         }

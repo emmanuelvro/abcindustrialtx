@@ -16,7 +16,8 @@ namespace abcindustrialtx.Entities
         public int IdColor { get; set; }
         public int? IdExistencia { get; set; }
         public int? IdCalibre { get; set; }
-        public bool Activo { get; set; }
+        public DateTime FechaModificacion { get; set; }
+        public short Activo { get; set; }
         public decimal? PorcentajeColor { get; set; }
         public string Descripcion { get; set; }
 
