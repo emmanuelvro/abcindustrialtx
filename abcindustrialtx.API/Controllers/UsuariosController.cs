@@ -3,14 +3,15 @@ using abcindustrialtx.Entities;
 using abcindustrialtx.Entities.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace abcindustrialtx.API.Controllers
 {
@@ -18,38 +19,68 @@ namespace abcindustrialtx.API.Controllers
     [ApiController]
     public class UsuariosController : ControllerBase
     {
-        private readonly IUsuariosBLL _Usuarios = null;
+        private readonly ICatUsuarioBLL _catUsuario = null;
         private readonly IMapper _mapper = null;
         private readonly IConfiguration _configuration;
+        private readonly ICatRolesBLL _catRolesBLL;
 
-        public UsuariosController(IUsuariosBLL Usuarios, IMapper mapper,
-            IConfiguration configuration)
+        public UsuariosController(ICatUsuarioBLL catUsuario, IMapper mapper,
+            IConfiguration configuration, ICatRolesBLL catRolesBLL)
         {
-            _Usuarios = Usuarios;
+            _catUsuario = catUsuario;
             _mapper = mapper;
             _configuration = configuration;
+            _catRolesBLL = catRolesBLL;
         }
 
         [HttpGet]
         public IActionResult GetAllUsers()
         {
-            return Ok(_Usuarios.GetUsers());
+            IEnumerable<UsuarioGetDto> users = _mapper.Map<IEnumerable<UsuarioGetDto>>(_catUsuario.GetUsers());
+
+            return Ok(users);
         }
 
-        [HttpPost("insertuser")]
-        public IActionResult InsertUser(UsuarioDto usuario)
+        [HttpGet("{id}", Name = nameof(GetUserById))]
+        public ActionResult<UsuarioGetDto> GetUserById(int id)
         {
-            var user = _mapper.Map<Usuarios>(usuario);
+            UsuarioGetDto user = _mapper.Map<UsuarioGetDto>(_catUsuario.GetUserById(id));
 
-            _Usuarios.Insert(user);
+            if (user == null)
+            {
+                return NotFound();
+            }
 
-            return Ok();
+            return Ok(user);
+        }
+
+        [HttpPost]
+        public ActionResult<UsuarioGetDto> InsertUser([FromBody] UsuarioCreateDto usuario)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Usuarios user = _mapper.Map<Usuarios>(usuario);
+
+            _catUsuario.Insert(user);
+
+            return CreatedAtAction(
+                nameof(GetUserById),
+                new { id = user.IdUsuario },
+                _mapper.Map<UsuarioGetDto>(user));
         }
 
         [HttpPost("login")]
-        public ActionResult<SuccessfulLoginResult> Login(UsuarioLoginDTO usuario)
+        public ActionResult<SuccessfulLoginResult> Login([FromBody] UsuarioLoginDTO usuario)
         {
-            Usuarios user = _Usuarios.Login(_mapper.Map<Usuarios>(usuario));
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Usuarios user = _catUsuario.Login(_mapper.Map<Usuarios>(usuario));
 
             if (user == null)
                 return BadRequest("Credenciales inválidas");
@@ -60,6 +91,87 @@ namespace abcindustrialtx.API.Controllers
 
             return new SuccessfulLoginResult() { Token = serializarToken };
         }
+
+        [HttpDelete("{id}")]
+        public ActionResult<Usuarios> Delete(int id)
+        {
+            Usuarios existeUsuario = _catUsuario.GetUserById(id);
+
+            if (existeUsuario == null)
+            {
+                return NotFound();
+            }
+
+            _catUsuario.Delete(existeUsuario);
+
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateUsuario(int id, [FromBody] UsuarioUpdateDto entidad)
+        {
+            Usuarios currentUser = null;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != entidad.IdUsuario)
+            {
+                return BadRequest("El id de la url no corresponde con el modelo");
+            }
+
+            try
+            {
+                currentUser = _catUsuario.GetUserById(id);
+
+                if (currentUser != null)
+                {
+                    entidad.CorreoElectronico = currentUser.CorreoElectronico;
+                    entidad.Telefono = currentUser.Telefono;
+
+                    Usuarios mapUser = _mapper.Map<Usuarios>(entidad);
+                    _catUsuario.Update(mapUser, id);
+                }
+                else
+                {
+                    return NotFound("El usuario que quiere actualizar no existe");
+                }
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok(_mapper.Map<UsuarioGetDto>(currentUser));
+        }
+
+        [HttpPost("agregarol")]
+        public ActionResult<UsuarioRolGetDto> AddRol([FromBody] UsuarioRolCreateDto usuarioRol)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            UsuariosRoles userToRol = _catUsuario.AddRolToUser(new Usuarios { IdUsuario = usuarioRol.IdUsuario }, new Roles { IdRol = usuarioRol.IdRol });
+
+            return Ok(_mapper.Map<UsuarioRolGetDto>(userToRol));
+        }
+
+        private bool UserExists(int id)
+        {
+            return _catUsuario.GetUsers().Any(e => e.IdUsuario == id);
+        }
+
 
         private JwtSecurityToken GenerateTokenAsync(Usuarios user)
         {
@@ -90,6 +202,7 @@ namespace abcindustrialtx.API.Controllers
 
             return token;
         }
+
+
     }
 }
-

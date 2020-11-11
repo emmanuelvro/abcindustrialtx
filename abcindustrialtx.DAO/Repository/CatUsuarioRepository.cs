@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace abcindustrialtx.DAO.Repository
 {
-    public class UsuariosRepository : Global<Usuarios>, IUsuariosDAO
+    public class UsuariosRepository : Global<Usuarios>, ICatUsuarioDAO
     {
         private readonly AbcIndustrialDbContext _context = null;
         public UsuariosRepository(AbcIndustrialDbContext context) : base(context)

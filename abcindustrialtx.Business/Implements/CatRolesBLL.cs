@@ -17,6 +17,26 @@ namespace abcindustrialtx.Business.Implements
         {
             return _rolesDAO.Get();
         }
+
+        public void Delete(Roles entidad)
+        {
+            _rolesDAO.Delete(entidad);
+        }
+
+        public Roles GetRolById(int id)
+        {
+            return _rolesDAO.GetById(id);
+        }
+
+        public Roles Insert(Roles entidad)
+        {
+            return _rolesDAO.Insert(entidad);
+        }
+
+        public void Update(Roles entidad, int id)
+        {
+            _rolesDAO.Update(entidad, id);
+        }
     }
 }
 

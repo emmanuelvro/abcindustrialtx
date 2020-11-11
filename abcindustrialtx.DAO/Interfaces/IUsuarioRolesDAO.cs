@@ -2,7 +2,7 @@
 
 namespace abcindustrialtx.DAO.Interfaces
 {
-    interface IUsuariosRolesDAO : IGlobalDAO<UsuariosRoles>
+    public interface IUsuarioRolesDAO : IGlobalDAO<UsuariosRoles>
     {
 
     }

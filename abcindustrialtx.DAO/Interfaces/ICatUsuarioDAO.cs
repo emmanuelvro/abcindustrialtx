@@ -2,7 +2,7 @@
 
 namespace abcindustrialtx.DAO.Interfaces
 {
-    public interface IUsuariosDAO: IGlobalDAO<Usuarios>
+    public interface ICatUsuarioDAO: IGlobalDAO<Usuarios>
     {
         Usuarios Login(string username, string password);
     }

@@ -60,14 +60,14 @@ namespace abcindustrialtx.API
 
             services.AddTransient<ICatColoresDAO, CatColoresRepository>();
             services.AddTransient<ICatCalibreDAO, CatCalibreRepository>();
-            services.AddTransient<IUsuariosDAO, UsuariosRepository>();
+            services.AddTransient<ICatUsuarioDAO, UsuariosRepository>();
             services.AddTransient<IRolesDAO, CatRolesRepository>();
             services.AddTransient<ICatMaterialesDAO, CatMaterialesRepository>();
             services.AddTransient<ICatPresentacionDAO, CatPresentacionRepository>();
 
             services.AddTransient<ICatColoresBLL, CatColoresBLL>();
             services.AddTransient<ICatCalibresBLL, CatCalibresBLL>();
-            services.AddTransient<IUsuariosBLL, UsuariosBLL>();
+            services.AddTransient<ICatUsuarioBLL, CatUsuarioBLL>();
             services.AddTransient<ICatRolesBLL, CatRolesBLL>();
             services.AddTransient<ICatMaterialesBLL, CatMaterialesBLL>();
             services.AddTransient<ICatPresentacionBLL, CatPresentacionBLL>();
