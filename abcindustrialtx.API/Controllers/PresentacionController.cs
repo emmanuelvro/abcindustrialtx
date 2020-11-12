@@ -3,6 +3,7 @@ using abcindustrialtx.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace abcindustrialtx.API.Controllers
@@ -31,12 +32,14 @@ namespace abcindustrialtx.API.Controllers
             return Ok(_catPresentacion.GetPresentacionById(id));
         }
 
-        [HttpPost("insertpresentacion")]
+        [HttpPost]
         public IActionResult InsertPresentacion(CatPresentacion presentaciones)
         {
-            var presentacion = _mapper.Map<CatPresentacion>(presentaciones);
+            //var presentacion = _mapper.Map<CatPresentacion>(presentaciones);
+            presentaciones.Activo = 1;
+            presentaciones.FechaAlta = DateTime.Now;
 
-            _catPresentacion.Insert(presentacion);
+            _catPresentacion.Insert(presentaciones);
 
             return Ok();
         }

@@ -3,6 +3,7 @@ using abcindustrialtx.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace abcindustrialtx.API.Controllers
@@ -33,12 +34,13 @@ namespace abcindustrialtx.API.Controllers
             return Ok(_catColores.GetColorById(id));
         }
 
-        [HttpPost("insertcolor")]
+        [HttpPost]
         public IActionResult InsertColor(CatColores colores)
         {
-            var color = _mapper.Map<CatColores>(colores);
-
-                _catColores.Insert(color);
+            //var color = _mapper.Map<CatColores>(colores);
+            colores.Activo = 1;
+            colores.FechaAlta = DateTime.Now;
+                _catColores.Insert(colores);
 
             return Ok();
         }

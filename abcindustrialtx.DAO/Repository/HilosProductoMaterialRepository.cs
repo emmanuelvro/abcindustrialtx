@@ -4,10 +4,12 @@ using abcindustrialtx.Entities;
 
 namespace abcindustrialtx.DAO.Repository
 {
-    public class HilosExistenciaRepository: Global<HilosExistencias>, IHilosExistenciaDAO
+    public class HilosProductoMaterialRepository : Global<HilosProductoMaterial>, IHilosProductoMaterialDAO
     {
         private readonly AbcIndustrialDbContext _context;
-        public HilosExistenciaRepository(AbcIndustrialDbContext context) : base(context) 
+
+        public HilosProductoMaterialRepository(AbcIndustrialDbContext context)
+            : base(context)
         {
             _context = context;
         }

@@ -1,8 +1,6 @@
-﻿using abcindustrialtx.Entities;
-using System;
-using System.Collections.Generic;
+﻿
+using abcindustrialtx.Entities;
 using System.Linq;
-using System.Text;
 
 namespace abcindustrialtx.Business.Interfaces
 {
@@ -10,5 +8,9 @@ namespace abcindustrialtx.Business.Interfaces
     {
         HilosExistencias Insert(HilosExistencias entidad);
         IQueryable<HilosExistencias> Get();
+        IQueryable<HilosExistencias> GetHilosExistencias();
+        HilosExistencias GetHilosExistenciasById(int id);
+        void Delete(HilosExistencias entidad);
+        void Update(HilosExistencias entidad, int id);
     }
 }

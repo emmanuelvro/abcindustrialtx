@@ -10,11 +10,11 @@ namespace abcindustrialtx.Entities
             HilosProductoMaterial = new HashSet<HilosProductoMaterial>();
             HilosProductosPedidos = new HashSet<HilosProductosPedidos>();
             ProductoPresentacion = new HashSet<ProductoPresentacion>();
+            HilosExistencias = new HashSet<HilosExistencias>();
         }
 
         public int IdHilosproducto { get; set; }
         public int IdColor { get; set; }
-        public int? IdExistencia { get; set; }
         public int? IdCalibre { get; set; }
         public DateTime FechaModificacion { get; set; }
         public short Activo { get; set; }
@@ -23,9 +23,9 @@ namespace abcindustrialtx.Entities
 
         public virtual CatCalibre IdCalibreNavigation { get; set; }
         public virtual CatColores IdColorNavigation { get; set; }
-        public virtual HilosExistencias IdExistenciaNavigation { get; set; }
         public virtual ICollection<HilosProductoMaterial> HilosProductoMaterial { get; set; }
         public virtual ICollection<HilosProductosPedidos> HilosProductosPedidos { get; set; }
         public virtual ICollection<ProductoPresentacion> ProductoPresentacion { get; set; }
+        public virtual ICollection<HilosExistencias> HilosExistencias { get; set; }
     }
 }

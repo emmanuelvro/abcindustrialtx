@@ -3,6 +3,7 @@ using abcindustrialtx.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace abcindustrialtx.API.Controllers
@@ -33,12 +34,13 @@ namespace abcindustrialtx.API.Controllers
             return Ok(_catMateriales.GetMaterialById(id));
         }
 
-        [HttpPost("insertmaterial")]
+        [HttpPost]
         public IActionResult InsertMaterial(CatMaterial materiales)
         {
-            var material = _mapper.Map<CatMaterial>(materiales);
-
-            _catMateriales.Insert(material);
+            //var material = _mapper.Map<CatMaterial>(materiales);
+            materiales.FechaAlta = DateTime.Now;
+            materiales.Activo = 1;
+            _catMateriales.Insert(materiales);
 
             return Ok();
         }
@@ -90,6 +92,6 @@ namespace abcindustrialtx.API.Controllers
             return _catMateriales.GetMateriales().Any(e => e.IdMaterial == id);
         }
 
-   
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using abcindustrialtx.Entities;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace abcindustrialtx.Business.Interfaces
@@ -12,5 +13,6 @@ namespace abcindustrialtx.Business.Interfaces
         void Delete(Usuarios entidad);
         void Update(Usuarios entidad, int id);
         UsuariosRoles AddRolToUser(Usuarios user, Roles roles);
+        IList<string> GetRolesByUser(Usuarios currentUser);
     }
 }

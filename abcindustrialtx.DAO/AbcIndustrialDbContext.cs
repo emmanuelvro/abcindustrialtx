@@ -239,9 +239,16 @@ namespace abcindustrialtx.DAO
 
                 entity.ToTable("hilos_existencias");
 
+                entity.HasIndex(e => e.IdHilosproducto)
+                    .HasName("IXFK_hilos_existencias_hilos_productos");
+
                 entity.Property(e => e.IdExistencia)
                     .HasColumnName("id_existencia")
                     .HasColumnType("int unsigned");
+
+                entity.Property(e => e.IdHilosproducto)
+                   .HasColumnName("id_hilosproducto")
+                   .HasColumnType("int unsigned");
 
                 entity.Property(e => e.Cantidad).HasColumnName("cantidad");
 
@@ -249,9 +256,11 @@ namespace abcindustrialtx.DAO
 
                 entity.Property(e => e.FechaAlta).HasColumnName("fecha_alta");
 
-                entity.Property(e => e.IdColor)
-                    .HasColumnName("id_color")
-                    .HasColumnType("int unsigned");
+
+                entity.HasOne(d => d.IdHilosproductoNavigation)
+                    .WithMany(p => p.HilosExistencias)
+                    .HasForeignKey(d => d.IdExistencia)
+                    .HasConstraintName("FK_hilos_productos_hilos_existencias");
             });
 
             modelBuilder.Entity<HilosProductoMaterial>(entity =>
@@ -307,8 +316,6 @@ namespace abcindustrialtx.DAO
                 entity.HasIndex(e => e.IdColor)
                     .HasName("IXFK_hilos_productos_cat_colores");
 
-                entity.HasIndex(e => e.IdExistencia)
-                    .HasName("IXFK_hilos_productos_hilos_existencias");
 
                 entity.Property(e => e.IdHilosproducto)
                     .HasColumnName("id_hilosproducto")
@@ -330,9 +337,7 @@ namespace abcindustrialtx.DAO
                     .HasColumnName("id_color")
                     .HasColumnType("int unsigned");
 
-                entity.Property(e => e.IdExistencia)
-                    .HasColumnName("id_existencia")
-                    .HasColumnType("int unsigned");
+               
 
                 entity.Property(e => e.PorcentajeColor)
                     .HasColumnName("porcentaje_color")
@@ -348,11 +353,6 @@ namespace abcindustrialtx.DAO
                     .HasForeignKey(d => d.IdColor)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_hilos_productos_cat_colores");
-
-                entity.HasOne(d => d.IdExistenciaNavigation)
-                    .WithMany(p => p.HilosProductos)
-                    .HasForeignKey(d => d.IdExistencia)
-                    .HasConstraintName("FK_hilos_productos_hilos_existencias");
             });
 
             modelBuilder.Entity<HilosProductosPedidos>(entity =>

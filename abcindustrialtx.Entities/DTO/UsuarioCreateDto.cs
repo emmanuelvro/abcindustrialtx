@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace abcindustrialtx.Entities.DTO
 {
     public class UsuarioCreateDto
     {
-        public int IdUsuario { get; set; }
-        public int IdRol { get; set; }
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string Password { get; set; }
+        [Required]
+        public string Telefono { get; set; }
+        [Required]
+        public string CorreoElectronico { get; set; }
     }
 }

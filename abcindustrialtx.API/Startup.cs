@@ -58,22 +58,50 @@ namespace abcindustrialtx.API
                     assambly => assambly.MigrationsAssembly("abcindustrialtx.API"));
             });
 
-            services.AddTransient<ICatColoresDAO, CatColoresRepository>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
+            services.Configure<IISOptions>(options =>
+            {
+                options.ForwardClientCertificate = false;
+            });
             services.AddTransient<ICatCalibreDAO, CatCalibreRepository>();
-            services.AddTransient<ICatUsuarioDAO, UsuariosRepository>();
-            services.AddTransient<IRolesDAO, CatRolesRepository>();
+            services.AddTransient<ICatColoresDAO, CatColoresRepository>();
             services.AddTransient<ICatMaterialesDAO, CatMaterialesRepository>();
             services.AddTransient<ICatPresentacionDAO, CatPresentacionRepository>();
+            services.AddTransient<IRolesDAO, CatRolesRepository>();
+            services.AddTransient<ICatUsuarioDAO, UsuariosRepository>();
+            services.AddTransient<IExistenciaMaterialesDAO, ExistenciaMaterialesRepository>();
+            services.AddTransient<IHilosExistenciaDAO, HilosExistenciaRepository>();
+            services.AddTransient<IHilosProductoMaterialDAO, HilosProductoMaterialRepository>();
+            services.AddTransient<IHilosProductosPedidosDAO, HilosProductosPedidosRepository>();
+            services.AddTransient<IHilosProductosDAO, HilosProductosRepository>();
+            services.AddTransient<IProductoPresentacionDAO, ProductoPresentacionRepository>();
+            services.AddTransient<IUsuarioRolesDAO, UsuariosRolesRepository>();
 
-            services.AddTransient<ICatColoresBLL, CatColoresBLL>();
             services.AddTransient<ICatCalibresBLL, CatCalibresBLL>();
-            services.AddTransient<ICatUsuarioBLL, CatUsuarioBLL>();
-            services.AddTransient<ICatRolesBLL, CatRolesBLL>();
+            services.AddTransient<ICatColoresBLL, CatColoresBLL>();
             services.AddTransient<ICatMaterialesBLL, CatMaterialesBLL>();
             services.AddTransient<ICatPresentacionBLL, CatPresentacionBLL>();
+            services.AddTransient<ICatRolesBLL, CatRolesBLL>();
+            services.AddTransient<ICatUsuarioBLL, CatUsuarioBLL>();
+            services.AddTransient<IHilosExistenciaBLL, HilosExistenciaBLL>();
+            services.AddTransient<IHilosProductoMaterialBLL, HilosProductoMaterialBLL>();
+            services.AddTransient<IHilosProductosBLL, HilosProductosBLL>();
+            services.AddTransient<IHilosProductosPedidosBLL, HilosProductosPedidosBLL>();
+            services.AddTransient<IProductoPresentacionBLL, ProductoPresentacionBLL>();
+            services.AddTransient<IUsuariosRolesBLL, UsuariosRolesBLL>();
 
             services.AddSingleton(mapper => _mapperConfiguration.CreateMapper());
-            services.AddControllers();
+            services.AddControllers().
+                AddJsonOptions(option =>
+                {
+                    option.JsonSerializerOptions.PropertyNamingPolicy = null;
+                }); ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,6 +111,7 @@ namespace abcindustrialtx.API
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors("CorsPolicy");
 
             app.UseHttpsRedirection();
 

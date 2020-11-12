@@ -2,6 +2,8 @@
 using abcindustrialtx.DAO.Interfaces;
 using abcindustrialtx.Entities;
 using abcindustrialtx.Utilities.Implements;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -65,6 +67,16 @@ namespace abcindustrialtx.Business.Implements
             entidad.UsrActivo = 1;
 
             _catUsuarioDAO.Update(entidad, id);
+        }
+
+        public IList<string> GetRolesByUser(Usuarios currentUser)
+        {
+            var roles = _usuariosRolesBLL.GetUsuariosRoles()
+                .Include(q => q.IdUsuarioNavigation)
+                .Include(q => q.IdRolNavigation).Where(q => q.IdUsuario == currentUser.IdUsuario)
+                .Select(q => q.IdRolNavigation.NombreRol);
+
+            return roles.ToList();
         }
     }
 }

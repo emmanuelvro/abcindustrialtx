@@ -2,8 +2,7 @@
 
 namespace abcindustrialtx.DAO.Interfaces
 {
-    public interface IHilosExistenciaDAO: IGlobalDAO<HilosExistencias>
+    public interface IHilosProductoMaterialDAO : IGlobalDAO<HilosProductoMaterial>
     {
-
     }
 }

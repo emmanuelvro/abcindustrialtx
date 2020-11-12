@@ -183,12 +183,12 @@ namespace abcindustrialtx.API.Controllers
                 new Claim(ClaimTypes.Name, user.Username),
             };
 
-            //var roles = await _roles.GetRolesAsync(user);
+            var roles = _catUsuario.GetRolesByUser(user);
 
-            //foreach (string role in roles)
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, role));
-            //}
+            foreach (string role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration.GetValue<string>("Restful:JwtKey")));
             SigningCredentials credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
