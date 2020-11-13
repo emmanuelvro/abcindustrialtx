@@ -1,6 +1,7 @@
 ﻿using abcindustrialtx.Business.Interfaces;
 using abcindustrialtx.Entities;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,6 +9,7 @@ using System.Linq;
 
 namespace abcindustrialtx.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ColoresController : ControllerBase
@@ -40,9 +42,8 @@ namespace abcindustrialtx.API.Controllers
             //var color = _mapper.Map<CatColores>(colores);
             colores.Activo = 1;
             colores.FechaAlta = DateTime.Now;
-                _catColores.Insert(colores);
 
-            return Ok();
+            return Ok(_catColores.Insert(colores));
         }
 
         [HttpDelete("{id}")]

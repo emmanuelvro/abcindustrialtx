@@ -23,7 +23,6 @@ namespace abcindustrialtx.API.Infrastructure
             CreateMap<RolesCreateDto, Roles>();
             CreateMap<RolesUpdateDto, Roles>();
 
-            CreateMap<HilosProductosCreateDTO, HilosProductos>();
         }
     }
 }

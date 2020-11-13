@@ -1,6 +1,7 @@
 ﻿using abcindustrialtx.Business.Interfaces;
 using abcindustrialtx.Entities;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,6 +9,7 @@ using System.Linq;
 
 namespace abcindustrialtx.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CalibresController : Controller
@@ -37,10 +39,7 @@ namespace abcindustrialtx.API.Controllers
             //var calibre = _mapper.Map<CatCalibre>(calibres);
             calibres.FechaModificacion = DateTime.Now;
             calibres.Activo = 1;
-
-            _catCalibre.Insert(calibres);
-
-            return Ok();
+            return Ok(_catCalibre.Insert(calibres));
         }
 
         [HttpDelete("{id}")]

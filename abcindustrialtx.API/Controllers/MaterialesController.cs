@@ -1,6 +1,7 @@
 ﻿using abcindustrialtx.Business.Interfaces;
 using abcindustrialtx.Entities;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,6 +9,7 @@ using System.Linq;
 
 namespace abcindustrialtx.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MaterialesController : ControllerBase
@@ -35,14 +37,13 @@ namespace abcindustrialtx.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult InsertMaterial(CatMaterial materiales)
+        public IActionResult InsertMaterial([FromBody] CatMaterial materiales)
         {
             //var material = _mapper.Map<CatMaterial>(materiales);
             materiales.FechaAlta = DateTime.Now;
             materiales.Activo = 1;
-            _catMateriales.Insert(materiales);
 
-            return Ok();
+            return Ok(_catMateriales.Insert(materiales));
         }
 
         [HttpDelete("{id}")]
@@ -63,13 +64,10 @@ namespace abcindustrialtx.API.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateMaterial(int id, CatMaterial entidad)
         {
-            if (id != entidad.IdMaterial)
-            {
-                return BadRequest();
-            }
-
             try
             {
+                entidad.FechaAlta = DateTime.Now;
+                entidad.Activo = 1;
                 _catMateriales.Update(entidad, id);
             }
             catch (DbUpdateConcurrencyException)

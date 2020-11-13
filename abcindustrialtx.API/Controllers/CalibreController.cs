@@ -1,12 +1,14 @@
 ﻿using abcindustrialtx.Business.Interfaces;
 using abcindustrialtx.Entities;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace abcindustrialtx.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CalibreController : Controller

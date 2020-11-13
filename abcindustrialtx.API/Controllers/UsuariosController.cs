@@ -2,6 +2,7 @@
 using abcindustrialtx.Entities;
 using abcindustrialtx.Entities.DTO;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,7 @@ using System.Text;
 
 namespace abcindustrialtx.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsuariosController : ControllerBase
@@ -72,6 +74,7 @@ namespace abcindustrialtx.API.Controllers
                 _mapper.Map<UsuarioGetDto>(user));
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public ActionResult<SuccessfulLoginResult> Login([FromBody] UsuarioLoginDTO usuario)
         {
@@ -196,7 +199,7 @@ namespace abcindustrialtx.API.Controllers
             JwtSecurityToken token = new JwtSecurityToken(_configuration.GetValue<string>("Restful:TokenIssuer"),
                 _configuration.GetValue<string>("Restful:TokenIssuer"),
                 claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddHours(23),
                 signingCredentials: credenciales
                 );
 

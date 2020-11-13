@@ -1,3 +1,4 @@
+using abcindustrialtx.API.Filters;
 using abcindustrialtx.API.Infrastructure;
 using abcindustrialtx.Business.Implements;
 using abcindustrialtx.Business.Interfaces;
@@ -8,6 +9,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +36,18 @@ namespace abcindustrialtx.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+            {
+                builder.AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins("*");
+            }
+           ));
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.Configure<IISOptions>(options =>
+            {
+                options.ForwardClientCertificate = false;
+            });
             services.AddAuthentication(auth =>
             {
                 auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -75,12 +89,6 @@ namespace abcindustrialtx.API
             services.AddTransient<ICatPresentacionDAO, CatPresentacionRepository>();
             services.AddTransient<IRolesDAO, CatRolesRepository>();
             services.AddTransient<ICatUsuarioDAO, UsuariosRepository>();
-            services.AddTransient<IExistenciaMaterialesDAO, ExistenciaMaterialesRepository>();
-            services.AddTransient<IHilosExistenciaDAO, HilosExistenciaRepository>();
-            services.AddTransient<IHilosProductoMaterialDAO, HilosProductoMaterialRepository>();
-            services.AddTransient<IHilosProductosPedidosDAO, HilosProductosPedidosRepository>();
-            services.AddTransient<IHilosProductosDAO, HilosProductosRepository>();
-            services.AddTransient<IProductoPresentacionDAO, ProductoPresentacionRepository>();
             services.AddTransient<IUsuarioRolesDAO, UsuariosRolesRepository>();
 
             services.AddTransient<ICatCalibresBLL, CatCalibresBLL>();
@@ -89,19 +97,12 @@ namespace abcindustrialtx.API
             services.AddTransient<ICatPresentacionBLL, CatPresentacionBLL>();
             services.AddTransient<ICatRolesBLL, CatRolesBLL>();
             services.AddTransient<ICatUsuarioBLL, CatUsuarioBLL>();
-            services.AddTransient<IHilosExistenciaBLL, HilosExistenciaBLL>();
-            services.AddTransient<IHilosProductoMaterialBLL, HilosProductoMaterialBLL>();
-            services.AddTransient<IHilosProductosBLL, HilosProductosBLL>();
-            services.AddTransient<IHilosProductosPedidosBLL, HilosProductosPedidosBLL>();
-            services.AddTransient<IProductoPresentacionBLL, ProductoPresentacionBLL>();
             services.AddTransient<IUsuariosRolesBLL, UsuariosRolesBLL>();
+            services.AddTransient<IProductosDAO, ProductosRepository>();
+            services.AddTransient<IProductosBLL, ProductosBLL>();
 
             services.AddSingleton(mapper => _mapperConfiguration.CreateMapper());
-            services.AddControllers().
-                AddJsonOptions(option =>
-                {
-                    option.JsonSerializerOptions.PropertyNamingPolicy = null;
-                }); ;
+            services.AddControllers().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -111,18 +112,28 @@ namespace abcindustrialtx.API
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseCors("CorsPolicy");
+           
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            // global cors policy
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+            app.UseMiddleware(typeof(GlobalExceptionFilter));
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
     }
 }

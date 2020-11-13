@@ -2,50 +2,41 @@
 using abcindustrialtx.Entities;
 using abcindustrialtx.Entities.DTO;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Renci.SshNet.Security.Cryptography.Ciphers.Modes;
+using System;
 using System.Threading.Tasks;
 
 namespace abcindustrialtx.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductosController : Controller
     {
-        private readonly IHilosProductosBLL _hilosProductosBLL = null;
-        private readonly IMapper _mapper;
+        private readonly IProductosBLL productosBLL = null;
 
-        public ProductosController(IHilosProductosBLL hilosProductosBLL, IMapper mapper)
+        public ProductosController(IProductosBLL _productosBLL)
         {
-            _hilosProductosBLL = hilosProductosBLL;
-            _mapper = mapper;
+            productosBLL = _productosBLL;
         }
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult GetProductos()
         {
-            //_hilosProductosBLL
-            return View();
+            return Ok(this.productosBLL.GetProductos());
         }
 
         [HttpPost]
-        public async Task<ActionResult> Insertar([FromBody] HilosProductosCreateDTO hilosProductosDto)
+        public IActionResult Insertar([FromBody] Productos model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            HilosProductos producto = _mapper.Map<HilosProductos>(hilosProductosDto);
-
-            await _hilosProductosBLL.InsertarProducto(producto,
-                new CatPresentacion { IdPresentacion = hilosProductosDto.IdPresentacion },
-                new CatMaterial { IdMaterial = hilosProductosDto.IdMaterial },
-                new HilosProductosPedidos { Cantidad = hilosProductosDto.Cantidad });
-
-            return Ok();
-            //return CreatedAtAction(
-            //    nameof(GetUserById),
-            //    new { id = user.IdUsuario },
-            //    _mapper.Map<UsuarioGetDto>(user));
+            model.FechaModificacion = DateTime.Now;
+            model.Activo = 1;
+            return Ok(this.productosBLL.Insert(model));
         }
     }
 }

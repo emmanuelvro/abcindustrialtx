@@ -5,10 +5,6 @@ namespace abcindustrialtx.Entities
 {
     public partial class CatColores
     {
-        public CatColores()
-        {
-            HilosProductos = new HashSet<HilosProductos>();
-        }
 
         public int IdColor { get; set; }
         public string Nombre { get; set; }
@@ -16,6 +12,5 @@ namespace abcindustrialtx.Entities
         public short Activo { get; set; }
         public DateTime FechaAlta { get; set; }
 
-        public virtual ICollection<HilosProductos> HilosProductos { get; set; }
     }
 }
