@@ -24,6 +24,9 @@ namespace abcindustrialtx.DAO
         public virtual DbSet<Usuarios> Usuarios { get; set; }
         public virtual DbSet<UsuariosRoles> UsuariosRoles { get; set; }
         public virtual DbSet<Productos> Productos { get; set; }
+        public virtual DbSet<ProductoColor> ProductoColor { get; set; }
+        public virtual DbSet<Pedidos> Pedido { get; set; }
+        public virtual DbSet<DetallePedido> DetallePedido { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -34,8 +37,86 @@ namespace abcindustrialtx.DAO
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)  
         {
+            modelBuilder.Entity<Pedidos>(entity =>
+            {
+                entity.HasKey(e => e.IdPedido)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("pedidos");
+
+                entity.Property(e => e.IdPedido)
+                    .HasColumnName("id_pedido")
+                    .HasColumnType("int unsigned");
+
+                entity.Property(e => e.NombreCliente)
+                    .IsRequired()
+                    .HasColumnName("nombre_cliente")
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IdStatus)
+                    .HasColumnName("id_status")
+                    .HasColumnType("int");
+
+                entity.Property(e => e.IdUsuario)
+                    .HasColumnName("id_usuario")
+                    .HasColumnType("int");
+               
+                entity.Property(e => e.Activo)
+                    .HasColumnName("activo")
+                    .HasColumnType("bit(1)");
+                entity.Property(e => e.FechaModificacion).HasColumnName("fecha_modificacion");
+            });
+
+            modelBuilder.Entity<DetallePedido>(entity =>
+            {
+                entity.HasKey(e => e.IdDetalle)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("detalle_pedido");
+
+                entity.Property(e => e.IdDetalle)
+                    .HasColumnName("id_detalle")
+                    .HasColumnType("int unsigned");
+
+                entity.Property(e => e.Observaciones)
+                    .IsRequired()
+                    .HasColumnName("observaciones")
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IdPedido)
+                    .HasColumnName("id_pedido")
+                    .HasColumnType("int");
+
+                entity.Property(e => e.IdProducto)
+                    .HasColumnName("id_producto")
+                    .HasColumnType("int");
+
+                entity.Property(e => e.Cantidad)
+                    .HasColumnName("cantidad")
+                    .HasColumnType("int");
+
+                entity.HasOne(d => d.Pedido)
+                   .WithMany(p => p.DetallePedido)
+                   .HasForeignKey(d => d.IdPedido)
+                   .OnDelete(DeleteBehavior.ClientSetNull)
+                   .HasConstraintName("FK_detalle_pedido_pedidos_id_pedido");
+
+                entity.HasOne(d => d.Producto)
+                   .WithMany(p => p.DetallePedido)
+                   .HasForeignKey(d => d.IdProducto)
+                   .OnDelete(DeleteBehavior.ClientSetNull)
+                   .HasConstraintName("FK_detalle_cat_productos_id_producto");
+
+                entity.Property(e => e.Activo)
+                    .HasColumnName("activo")
+                    .HasColumnType("bit(1)");
+                entity.Property(e => e.FechaModificacion).HasColumnName("fecha_modificacion");
+            });
+
             modelBuilder.Entity<Productos>(entity =>
             {
                 entity.HasKey(e => e.IdProducto)
@@ -43,9 +124,13 @@ namespace abcindustrialtx.DAO
 
                 entity.ToTable("cat_productos");
 
+                entity.Property(e => e.IdProducto)
+                    .HasColumnName("id_producto")
+                    .HasColumnType("int unsigned");
+
                 entity.Property(e => e.IdCalibre)
                     .HasColumnName("id_calibre")
-                    .HasColumnType("int unsigned");
+                    .HasColumnType("int");
 
                 entity.Property(e => e.Descripcion)
                     .IsRequired()
@@ -55,12 +140,19 @@ namespace abcindustrialtx.DAO
 
                 entity.Property(e => e.IdPresentacion)
                     .HasColumnName("id_presentacion")
-                    .HasColumnType("int unsigned");
+                    .HasColumnType("int");
 
-                entity.HasOne(d => d.IdCalibreNavigation)
-                    .WithMany(p => p.)
-                    .HasForeignKey(d => d)
+                entity.HasOne(d => d.Calibre)
+                    .WithMany(p => p.Productos)
+                    .HasForeignKey(d => d.IdCalibre)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_cat_productos_cat_calibres_id_calibre");
+
+                entity.HasOne(d => d.Presentacion)
+                    .WithMany(p => p.Productos)
+                    .HasForeignKey(d => d.IdPresentacion)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_cat_productos_cat_presentacion_id_presentacion");
 
                 entity.Property(e => e.Stock)
                     .HasColumnName("stock")
@@ -71,12 +163,58 @@ namespace abcindustrialtx.DAO
                     .HasColumnType("bit(1)");
                 entity.Property(e => e.FechaModificacion).HasColumnName("fecha_modificacion");
             });
+
+
+            modelBuilder.Entity<ProductoColor>(entity =>
+            {
+                entity.HasKey(e => e.IdProductoColor)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("producto_color");
+
+                entity.Property(e => e.IdProductoColor)
+                    .HasColumnName("id_prod_color")
+                    .HasColumnType("int");
+
+                entity.Property(e => e.IdColor)
+                    .HasColumnName("id_color")
+                    .HasColumnType("int");
+
+                entity.Property(e => e.IdProducto)
+                    .HasColumnName("id_producto")
+                    .HasColumnType("int");
+
+                entity.Property(e => e.Porcentaje)
+                    .HasColumnName("porcentaje")
+                    .HasColumnType("decimal(10,2)");
+
+                entity.Property(e => e.Activo)
+                    .HasColumnName("activo")
+                    .HasColumnType("bit(1)");
+
+                entity.Property(e => e.FechaModificacion).HasColumnName("fecha_modificacion");
+
+                entity.HasOne<CatColores>(d => d.Color)
+                   .WithMany(p => p.ProductoColor)
+                   .HasForeignKey(d => d.IdColor);
+
+                entity.HasOne(d => d.Producto)
+                   .WithMany(p => p.ProductoColor)
+                   .HasForeignKey(d => d.IdProducto)
+                   .OnDelete(DeleteBehavior.ClientSetNull)
+                   .HasConstraintName("FK_producto_color_cat_productos_id_producto");
+            });
+
             modelBuilder.Entity<ProductoMaterial>(entity =>
             {
                 entity.HasKey(e => e.IdProductoMaterial)
                     .HasName("PRIMARY");
 
                 entity.ToTable("producto_material");
+
+                entity.Property(e => e.IdProductoMaterial)
+                    .HasColumnName("id_prod_material")
+                    .HasColumnType("int unsigned");
 
                 entity.Property(e => e.IdProducto)
                     .HasColumnName("id_producto")
@@ -85,6 +223,18 @@ namespace abcindustrialtx.DAO
                 entity.Property(e => e.IdMaterial)
                     .HasColumnName("id_material")
                     .HasColumnType("int");
+
+                entity.HasOne <CatMaterial>(d => d.Material)
+                   .WithMany(p => p.ProductoMaterial)
+                   .HasForeignKey(d => d.IdMaterial)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_producto_material_cat_material_id_material");
+
+                entity.HasOne(d => d.Producto)
+                  .WithMany(p => p.ProductoMaterial)
+                  .HasForeignKey(d => d.IdProducto)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_producto_material_cat_productos_id_producto");
 
                 entity.Property(e => e.Activo)
                     .HasColumnName("activo")
@@ -109,6 +259,10 @@ namespace abcindustrialtx.DAO
                 entity.Property(e => e.Calibre)
                     .HasColumnName("calibre")
                     .HasColumnType("decimal(10,2) unsigned");
+
+                entity.HasMany(e => e.Productos)
+                .WithOne(s => s.Calibre)
+                .HasForeignKey(s => s.IdCalibre).IsRequired();
 
                 entity.Property(e => e.FechaModificacion).HasColumnName("fecha_modificacion");
             });

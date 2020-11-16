@@ -57,21 +57,18 @@ namespace abcindustrialtx.API.Controllers
             return existeCalibre;
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateCalibre(int id, CatCalibre entidad)
+        [HttpPut]
+        public IActionResult UpdateCalibre(CatCalibre entidad)
         {
-            if (id != entidad.IdCalibre)
-            {
-                return BadRequest();
-            }
+           
 
             try
             {
-                _catCalibre.Update(entidad, id);
+                _catCalibre.Update(entidad, entidad.IdCalibre);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CalibreExists(id))
+                if (!CalibreExists(entidad.IdCalibre))
                 {
                     return NotFound();
                 }
@@ -81,7 +78,7 @@ namespace abcindustrialtx.API.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(entidad);
         }
 
         private bool CalibreExists(int id)

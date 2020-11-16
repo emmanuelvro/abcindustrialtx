@@ -38,5 +38,33 @@ namespace abcindustrialtx.API.Controllers
             model.Activo = 1;
             return Ok(this.productosBLL.Insert(model));
         }
+
+
+        [HttpPut]
+        public IActionResult Update([FromBody] Productos model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            this.productosBLL.Update(model, model.IdProducto);
+            return Ok(model);
+        }
+
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            Productos prod = productosBLL.GetProductoseById(id);
+
+            if (prod == null)
+            {
+                return NotFound();
+            }
+
+            productosBLL.Delete(prod);
+
+            return Ok(prod != null);
+        }
     }
 }

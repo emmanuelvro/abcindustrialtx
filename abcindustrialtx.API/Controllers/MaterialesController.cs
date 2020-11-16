@@ -61,18 +61,18 @@ namespace abcindustrialtx.API.Controllers
             return existeMaterial;
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateMaterial(int id, CatMaterial entidad)
+        [HttpPut]
+        public IActionResult UpdateMaterial(CatMaterial entidad)
         {
             try
             {
                 entidad.FechaAlta = DateTime.Now;
                 entidad.Activo = 1;
-                _catMateriales.Update(entidad, id);
+                _catMateriales.Update(entidad, entidad.IdMaterial);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MaterialExists(id))
+                if (!MaterialExists(entidad.IdMaterial))
                 {
                     return NotFound();
                 }
@@ -82,7 +82,7 @@ namespace abcindustrialtx.API.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(entidad);
         }
 
         private bool MaterialExists(int id)

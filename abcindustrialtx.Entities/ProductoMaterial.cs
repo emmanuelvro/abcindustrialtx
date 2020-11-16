@@ -11,8 +11,8 @@ namespace abcindustrialtx.Entities
         public DateTime FechaModificacion { get; set; }
         public short Activo { get; set; }
 
-        public virtual CatCalibre IdCalibreNavigation { get; set; }
-        public virtual CatColores IdColorNavigation { get; set; }
+        public virtual CatMaterial Material { get; set; }
+        public virtual Productos Producto { get; set; }
 
     }
 }

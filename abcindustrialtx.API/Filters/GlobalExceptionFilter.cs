@@ -33,13 +33,18 @@ namespace abcindustrialtx.API.Filters
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var status = HttpStatusCode.InternalServerError;
-            var code = string.Empty;
+            string code = string.Empty;
             object values = null;
             if (exception is GenericException exception1)
             {
                 status = HttpStatusCode.BadRequest;
                 code = exception1.Code;
                 values = exception1.Values;
+            }
+            else
+            {
+                code = ((int)HttpStatusCode.InternalServerError).ToString();
+                values = exception.InnerException;
             }
             var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
             var result = JsonConvert.SerializeObject(new { code, exception.Message, values }, jsonSettings);

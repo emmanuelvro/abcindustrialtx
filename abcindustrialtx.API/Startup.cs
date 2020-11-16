@@ -15,6 +15,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace abcindustrialtx.API
@@ -101,8 +107,29 @@ namespace abcindustrialtx.API
             services.AddTransient<IProductosDAO, ProductosRepository>();
             services.AddTransient<IProductosBLL, ProductosBLL>();
 
+            services.AddTransient<IProductosColorDAO, ProductosColorRepository>();
+            services.AddTransient<IProductosColorBLL, ProductosColorBLL>();
+            services.AddTransient<IProductosMaterialDAO, ProductosMaterialRepository>();
+            services.AddTransient<IProductosMaterialBLL, ProductosMaterialBLL>();
+
+            services.AddTransient<IPedidosDAO, PedidosRepository>();
+            services.AddTransient<IPedidosBLL, PedidosBLL>();
+
+            services.AddTransient<IPedidoDetalleDAO, PedidosDetalleRepository>();
+            services.AddTransient<IPedidoDetalleBLL, PedidoDetalleBLL>();
+
             services.AddSingleton(mapper => _mapperConfiguration.CreateMapper());
-            services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            }).AddNewtonsoftJson(x => {
+                x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                x.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                x.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
+                x.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -113,7 +140,7 @@ namespace abcindustrialtx.API
                 app.UseDeveloperExceptionPage();
             }
            
-
+            app.UseMiddleware(typeof(GlobalExceptionFilter));
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -131,9 +158,11 @@ namespace abcindustrialtx.API
             {
                 endpoints.MapControllers();
             });
-            app.UseMiddleware(typeof(GlobalExceptionFilter));
+            
             app.UseDefaultFiles();
             app.UseStaticFiles();
         }
     }
+
+    
 }

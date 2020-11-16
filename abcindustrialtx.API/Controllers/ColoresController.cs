@@ -60,21 +60,16 @@ namespace abcindustrialtx.API.Controllers
 
             return existeColor;
         }
-        [HttpPut("{id}")]
-        public IActionResult UpdateColors(int id, CatColores entidad)
-         {
-            if (id != entidad.IdColor)
-            {
-                return BadRequest();
-            }
-
+        [HttpPut]
+        public IActionResult UpdateColors(CatColores entidad)
+        {
             try
             {
-                _catColores.Update(entidad, id);
+                _catColores.Update(entidad, entidad.IdColor);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ColorsExists(id))
+                if (!ColorsExists(entidad.IdColor))
                 {
                     return NotFound();
                 }
@@ -84,7 +79,7 @@ namespace abcindustrialtx.API.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(entidad);
         }
         private bool ColorsExists(int id)
         {

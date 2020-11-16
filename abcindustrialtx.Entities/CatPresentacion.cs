@@ -7,7 +7,7 @@ namespace abcindustrialtx.Entities
     {
         public CatPresentacion()
         {
-            ProductoPresentacion = new HashSet<ProductoMaterial>();
+            Productos = new HashSet<Productos>();
         }
 
         public int IdPresentacion { get; set; }
@@ -16,6 +16,6 @@ namespace abcindustrialtx.Entities
         public DateTime FechaAlta { get; set; }
         public short Activo { get; set; }
 
-        public virtual ICollection<ProductoMaterial> ProductoPresentacion { get; set; }
+        public virtual ICollection<Productos> Productos { get; set; }
     }
 }

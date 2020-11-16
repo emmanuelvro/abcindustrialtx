@@ -49,8 +49,17 @@ namespace abcindustrialtx.DAO.Implements
 
         public T Insert(T entidad)
         {
-            _context.Set<T>().Add(entidad);
-            _context.SaveChanges();
+            try
+            {
+                _context.Set<T>().Add(entidad);
+                _context.SaveChanges();
+            }
+            catch (System.Exception e)
+            {
+
+                throw;
+            }
+            
             return entidad;
         }
 

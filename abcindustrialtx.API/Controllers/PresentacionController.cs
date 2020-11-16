@@ -59,21 +59,18 @@ namespace abcindustrialtx.API.Controllers
 
             return existePresentacion;
         }
-        [HttpPut("{id}")]
-        public IActionResult UpdatePresentacion(int id, CatPresentacion entidad)
+        [HttpPut]
+        public IActionResult UpdatePresentacion(CatPresentacion entidad)
         {
-            if (id != entidad.IdPresentacion)
-            {
-                return BadRequest();
-            }
+            
 
             try
             {
-                _catPresentacion.Update(entidad, id);
+                _catPresentacion.Update(entidad, entidad.IdPresentacion);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PresentacionExists(id))
+                if (!PresentacionExists(entidad.IdPresentacion))
                 {
                     return NotFound();
                 }
@@ -83,7 +80,7 @@ namespace abcindustrialtx.API.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(entidad);
         }
         private bool PresentacionExists(int id)
         {
