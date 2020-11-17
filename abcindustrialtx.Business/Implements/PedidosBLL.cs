@@ -36,13 +36,12 @@ namespace abcindustrialtx.Business.Implements
             {
                 x.DetallePedido = this.detelleDao.GetPedidoDetalle()
                 .Where(c => c.IdPedido == x.IdPedido)
-                .Select(x => new DetallePedido { 
+                .Select(x => new DetallePedido {
                     Activo = x.Activo, 
                     IdProducto = x.IdProducto,
                     FechaModificacion = x.FechaModificacion, 
                     IdDetalle = x.IdDetalle, 
-                    Cantidad = x.Cantidad, 
-                    Observaciones = x.Observaciones
+                    Cantidad = x.Cantidad
                 }).ToList();
 
                 x.DetallePedido.ToList().ForEach(c =>

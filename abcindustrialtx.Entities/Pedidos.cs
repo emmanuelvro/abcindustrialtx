@@ -11,6 +11,7 @@ namespace abcindustrialtx.Entities
             this.DetallePedido = new HashSet<DetallePedido>();
         }
         public int IdPedido { get; set; }
+        public string Observaciones { get; set; }
         public string NombreCliente { get; set; }
         public int IdStatus { get; set; }
         public int IdUsuario { get; set; }

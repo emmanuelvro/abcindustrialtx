@@ -36,12 +36,16 @@ namespace abcindustrialtx.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-           
+            model.DetallePedido.ToList().ForEach(x =>
+            {
+                x.Activo = 1;
+                x.FechaModificacion = DateTime.Now;
+            });
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claims = identity.Claims;
             var sid = claims.Where(x => x.Type == ClaimTypes.NameIdentifier).Select(x => x.Value).LastOrDefault();
             model.IdUsuario = Convert.ToInt32(sid);
-             model.FechaModificacion = DateTime.Now;
+            model.FechaModificacion = DateTime.Now;
             model.Activo = 1;
             return Ok(this.pedidosBLL.Insert(model));
         }

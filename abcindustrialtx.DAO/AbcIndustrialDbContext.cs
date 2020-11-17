@@ -56,6 +56,11 @@ namespace abcindustrialtx.DAO
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Observaciones)
+                    .HasColumnName("observaciones")
+                    .HasMaxLength(1500)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.IdStatus)
                     .HasColumnName("id_status")
                     .HasColumnType("int");
@@ -81,11 +86,7 @@ namespace abcindustrialtx.DAO
                     .HasColumnName("id_detalle")
                     .HasColumnType("int unsigned");
 
-                entity.Property(e => e.Observaciones)
-                    .IsRequired()
-                    .HasColumnName("observaciones")
-                    .HasMaxLength(250)
-                    .IsUnicode(false);
+                
 
                 entity.Property(e => e.IdPedido)
                     .HasColumnName("id_pedido")

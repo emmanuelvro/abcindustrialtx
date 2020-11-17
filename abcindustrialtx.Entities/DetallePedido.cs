@@ -10,7 +10,6 @@ namespace abcindustrialtx.Entities
         public int IdPedido { get; set; }
         public int IdProducto { get; set; }
         public int Cantidad { get; set; }
-        public string Observaciones { get; set; }
         public short Activo { get; set; }
         public DateTime FechaModificacion { get; set; }
         public virtual Pedidos Pedido { get; set; }
